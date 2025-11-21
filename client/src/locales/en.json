@@ -1,0 +1,14 @@
+{
+  "welcome_title": "Simplified Labor Management",
+  "welcome_subtitle": "Manage your vacations, overtime, and contracts in one place.",
+  "login_btn": "Login",
+  "logout_btn": "Logout",
+  "google_login": "Continue with Google",
+  "profile": "My Profile",
+  "contracts": "My Contracts",
+  "vacation_calc": "Vacation Calculator",
+  "ask_ai": "AI Legal Assistant",
+  "ask_placeholder": "Ask about labor laws (e.g., Is working 12 hours legal?)",
+  "loading": "Loading...",
+  "error": "An error occurred"
+}

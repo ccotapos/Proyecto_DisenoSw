@@ -1,0 +1,14 @@
+{
+  "welcome_title": "Gestión Laboral Simplificada",
+  "welcome_subtitle": "Controla tus vacaciones, horas extra y contratos en un solo lugar.",
+  "login_btn": "Iniciar Sesión",
+  "logout_btn": "Cerrar Sesión",
+  "google_login": "Continuar con Google",
+  "profile": "Mi Perfil",
+  "contracts": "Mis Contratos",
+  "vacation_calc": "Calculadora Vacaciones",
+  "ask_ai": "Asistente Legal IA",
+  "ask_placeholder": "Pregunta sobre leyes laborales (ej: ¿Es legal trabajar 12 horas?)",
+  "loading": "Cargando...",
+  "error": "Ocurrió un error"
+}
