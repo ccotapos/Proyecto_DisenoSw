@@ -1,14 +1,82 @@
 {
-  "welcome_title": "Simplified Labor Management",
-  "welcome_subtitle": "Manage your vacations, overtime, and contracts in one place.",
-  "login_btn": "Login",
-  "logout_btn": "Logout",
-  "google_login": "Continue with Google",
-  "profile": "My Profile",
-  "contracts": "My Contracts",
-  "vacation_calc": "Vacation Calculator",
-  "ask_ai": "AI Legal Assistant",
-  "ask_placeholder": "Ask about labor laws (e.g., Is working 12 hours legal?)",
-  "loading": "Loading...",
-  "error": "An error occurred"
+  "navbar": {
+    "brand": "LaborManager",
+    "dashboard": "Dashboard",
+    "calculator": "Calculator",
+    "profile": "Profile",
+    "logout": "Logout",
+    "login": "Login",
+    "hello": "Hello"
+  },
+  "home": {
+    "welcome_title": "Simplified Labor Management",
+    "welcome_subtitle": "Manage your vacations, overtime, and contracts in one place.",
+    "login_btn": "Start Now",
+    "vacation_calc": "Vacation Calculator",
+    "cards": {
+      "holidays": "Legal Holidays",
+      "holidays_desc": "Updated consultation of days off according to Chilean law.",
+      "ai": "AI Advisory",
+      "ai_desc": "Solve doubts about contracts and overtime instantly.",
+      "vacations": "Vacations",
+      "vacations_desc": "Exact calculation of progressive and accumulated days."
+    }
+  },
+  "login": {
+    "welcome": "Welcome",
+    "create_account": "Create Account",
+    "subtitle_login": "Login to manage your hours",
+    "subtitle_register": "Enter your details to start",
+    "name": "Full Name",
+    "email": "Email",
+    "password": "Password",
+    "btn_login": "Login",
+    "btn_register": "Register",
+    "have_account": "Already have an account?",
+    "no_account": "Don't have an account?",
+    "link_login": "Login here",
+    "link_register": "Register here",
+    "or_continue": "Or continue with",
+    "error_google": "Google authentication failed"
+  },
+  "dashboard": {
+    "title": "Labor Control Panel",
+    "select_year": "Consult Holidays for Year:",
+    "loading": "Loading holidays...",
+    "no_data": "No data for this year",
+    "table": {
+      "date": "Date",
+      "title": "Holiday",
+      "type": "Type"
+    }
+  },
+  "calculator": {
+    "title": "Vacation Calculator",
+    "label_antiquity": "Years of Service",
+    "btn_calc": "Calculate Days",
+    "result_title": "Your legal days:",
+    "base": "Base Days (Business Days)",
+    "progressive": "Progressive Days",
+    "total": "Total Days"
+  },
+  "profile": {
+    "contracts_title": "My Contracts",
+    "register_title": "Register New Contract",
+    "import_title": "Import Contract (PDF/Image)",
+    "import_desc": "Upload your scanned contract and we will save it.",
+    "btn_select_file": "Select File",
+    "form": {
+      "company": "Company",
+      "role": "Job Title",
+      "start_date": "Start Date",
+      "type": "Contract Type",
+      "btn_save": "Save Contract"
+    },
+    "ai_title": "AI Legal Assistant",
+    "ai_desc": "Doubts about your contract? Ask me.",
+    "ai_placeholder": "E.g., How many notice days do I need to resign?",
+    "btn_consult": "Consult",
+    "loading": "Thinking...",
+    "no_contracts": "You have no registered contracts."
+  }
 }

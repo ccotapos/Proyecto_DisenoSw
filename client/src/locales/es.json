@@ -1,14 +1,82 @@
 {
-  "welcome_title": "Gestión Laboral Simplificada",
-  "welcome_subtitle": "Controla tus vacaciones, horas extra y contratos en un solo lugar.",
-  "login_btn": "Iniciar Sesión",
-  "logout_btn": "Cerrar Sesión",
-  "google_login": "Continuar con Google",
-  "profile": "Mi Perfil",
-  "contracts": "Mis Contratos",
-  "vacation_calc": "Calculadora Vacaciones",
-  "ask_ai": "Asistente Legal IA",
-  "ask_placeholder": "Pregunta sobre leyes laborales (ej: ¿Es legal trabajar 12 horas?)",
-  "loading": "Cargando...",
-  "error": "Ocurrió un error"
+  "navbar": {
+    "brand": "GestoLaboral",
+    "dashboard": "Dashboard",
+    "calculator": "Calculadora",
+    "profile": "Perfil",
+    "logout": "Salir",
+    "login": "Ingresar",
+    "hello": "Hola"
+  },
+  "home": {
+    "welcome_title": "Gestión Laboral Simplificada",
+    "welcome_subtitle": "Controla tus vacaciones, horas extra y contratos en un solo lugar.",
+    "login_btn": "Comenzar Ahora",
+    "vacation_calc": "Calculadora Vacaciones",
+    "cards": {
+      "holidays": "Feriados Legales",
+      "holidays_desc": "Consulta actualizada de días libres según la ley chilena.",
+      "ai": "Asesoría IA",
+      "ai_desc": "Resuelve dudas sobre contratos y horas extra al instante.",
+      "vacations": "Vacaciones",
+      "vacations_desc": "Cálculo exacto de días progresivos y acumulados."
+    }
+  },
+  "login": {
+    "welcome": "Bienvenido",
+    "create_account": "Crear Cuenta",
+    "subtitle_login": "Ingresa para gestionar tus horas",
+    "subtitle_register": "Ingresa tus datos para comenzar",
+    "name": "Nombre Completo",
+    "email": "Email",
+    "password": "Contraseña",
+    "btn_login": "Iniciar Sesión",
+    "btn_register": "Registrarse",
+    "have_account": "¿Ya tienes cuenta?",
+    "no_account": "¿No tienes cuenta?",
+    "link_login": "Inicia Sesión aquí",
+    "link_register": "Regístrate aquí",
+    "or_continue": "O continúa con",
+    "error_google": "Falló la autenticación con Google"
+  },
+  "dashboard": {
+    "title": "Panel de Control Laboral",
+    "select_year": "Consultar Feriados Año:",
+    "loading": "Cargando feriados...",
+    "no_data": "No hay datos para este año",
+    "table": {
+      "date": "Fecha",
+      "title": "Feriado",
+      "type": "Tipo"
+    }
+  },
+  "calculator": {
+    "title": "Calculadora de Vacaciones",
+    "label_antiquity": "Años de Antigüedad Laboral",
+    "btn_calc": "Calcular Días",
+    "result_title": "Tus días legales:",
+    "base": "Días Base (Hábiles)",
+    "progressive": "Días Progresivos",
+    "total": "Total Días"
+  },
+  "profile": {
+    "contracts_title": "Mis Contratos",
+    "register_title": "Registrar Nuevo Contrato",
+    "import_title": "Importar Contrato (PDF/Imagen)",
+    "import_desc": "Sube tu contrato escaneado y lo guardaremos.",
+    "btn_select_file": "Seleccionar Archivo",
+    "form": {
+      "company": "Empresa",
+      "role": "Cargo",
+      "start_date": "Fecha de Inicio",
+      "type": "Tipo de Contrato",
+      "btn_save": "Guardar Contrato"
+    },
+    "ai_title": "Asistente Legal IA",
+    "ai_desc": "¿Tienes dudas sobre tu contrato? Pregúntame.",
+    "ai_placeholder": "Ej: ¿Cuántos días de aviso necesito para renunciar?",
+    "btn_consult": "Consultar",
+    "loading": "Pensando...",
+    "no_contracts": "No tienes contratos registrados."
+  }
 }

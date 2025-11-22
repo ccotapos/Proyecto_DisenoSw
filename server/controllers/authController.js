@@ -95,3 +95,19 @@ exports.googleLogin = async (req, res) => {
     res.status(500).send('Error del servidor');
   }
 };
+
+// Actualizar Perfil (Update)
+exports.updateProfile = async (req, res) => {
+  try {
+    // Buscamos por ID y actualizamos. {new: true} devuelve el usuario ya cambiado.
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user.id,
+      { $set: req.body }, // Actualiza solo los campos que enviemos
+      { new: true, select: '-password' } // No devolvemos la contraseña
+    );
+    res.json(updatedUser);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Error al actualizar perfil');
+  }
+};
