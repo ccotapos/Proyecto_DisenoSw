@@ -1,51 +1,48 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+const OpenAI = require("openai");
+
+// Configuración inicial
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 exports.consultAI = async (req, res) => {
   const { question } = req.body;
 
-  console.log("--- CONSULTANDO IA ---");
+  console.log("--- CONSULTANDO OPENAI (ChatGPT) ---");
 
-  if (!process.env.GEMINI_API_KEY) {
-    return res.status(500).json({ msg: "Falta configurar API Key de Gemini" });
+  if (!process.env.OPENAI_API_KEY) {
+    return res.status(500).json({ msg: "Falta configurar OPENAI_API_KEY" });
   }
 
   try {
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    
-    // INTENTO 1: Usamos el nombre técnico exacto de la versión estable
-    // A veces "gemini-1.5-flash" (el alias) falla, pero "gemini-1.5-flash-001" funciona.
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-001" });
+    // Hacemos la petición al modelo GPT-3.5 Turbo (rápido y económico)
+    const completion = await openai.chat.completions.create({
+      messages: [
+        { role: "system", content: "Eres un abogado experto en el código laboral chileno. Responde de forma clara, concisa y útil para un trabajador." },
+        { role: "user", content: question }
+      ],
+      model: "gpt-3.5-turbo",
+    });
 
-    const prompt = `Actúa como un abogado experto en código laboral chileno. Responde en máximo 3 párrafos, claro y conciso a lo siguiente: ${question}`;
+    // Extraemos la respuesta
+    const text = completion.choices[0].message.content;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-
-    console.log("¡Éxito! Respuesta recibida.");
+    console.log("¡Respuesta de OpenAI recibida!");
     res.json({ answer: text });
-    
-  } catch (error) {
-    console.error("--- FALLÓ EL MODELO ---");
-    console.error("Error específico:", error.message);
 
-    // PLAN B DE EMERGENCIA: Si falla, intentamos usar 'gemini-pro' (la versión clásica)
-    try {
-        console.log("Intentando con Plan B (gemini-pro)...");
-        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-        const modelB = genAI.getGenerativeModel({ model: "gemini-pro" });
-        const resultB = await modelB.generateContent(question);
-        const responseB = await resultB.response;
-        
-        console.log("¡Plan B funcionó!");
-        return res.json({ answer: responseB.text() });
-    } catch (errorB) {
-        console.error("Plan B también falló.");
-        // Devolvemos el error al frontend para que sepas qué pasó
-        res.status(500).json({ 
-            msg: "Error conectando con IA. Verifica tu API Key o región.", 
-            details: error.message 
-        });
+  } catch (error) {
+    console.error("--- ERROR OPENAI ---");
+    // Manejo de errores comunes (como falta de crédito)
+    if (error.response) {
+        console.error(error.response.status);
+        console.error(error.response.data);
+    } else {
+        console.error(error.message);
     }
+    
+    res.status(500).json({ 
+      msg: "Error conectando con OpenAI", 
+      details: "Verifica que tu API Key tenga créditos/saldo disponible." 
+    });
   }
 };
