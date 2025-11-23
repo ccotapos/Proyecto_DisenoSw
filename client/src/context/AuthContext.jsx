@@ -3,25 +3,18 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const AuthContext = createContext();
 
-export const useAuth = () => useContext(AuthContext);
+// Exportación nombrada del Hook (Esto es lo que Vite estaba reclamando)
+export const useAuth = () => {
+  return useContext(AuthContext);
+};
 
+// Exportación nombrada del Componente
 export const AuthProvider = ({ children }) => {
-  // CORRECCIÓN: Inicializamos el estado LEYENDO directamente del localStorage.
-  // Así, si recargas la página, React arranca ya sabiendo quién eres.
+  // Inicializamos leyendo del localStorage para persistencia
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem('user');
     return storedUser ? JSON.parse(storedUser) : null;
   });
-
-  // Guardar token en axios interceptor si es necesario, 
-  // pero por ahora aseguramos que el estado visual se mantenga.
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token && user) {
-      // Si hay usuario pero no token (caso raro), limpiar
-      setUser(null);
-    }
-  }, []);
 
   const login = (userData, token) => {
     localStorage.setItem('user', JSON.stringify(userData));
