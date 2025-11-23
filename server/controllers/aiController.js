@@ -1,48 +1,68 @@
-const OpenAI = require("openai");
+const fs = require('fs');
+const pdf = require('pdf-parse');
+const OpenAI = require("openai"); // O GoogleGenerativeAI si volviste a Gemini
 
-// Configuración inicial
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Configuración (Asegúrate de tener esto según tu IA actual)
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-exports.consultAI = async (req, res) => {
-  const { question } = req.body;
+// ... tu función consultAI existente ...
 
-  console.log("--- CONSULTANDO OPENAI (ChatGPT) ---");
-
-  if (!process.env.OPENAI_API_KEY) {
-    return res.status(500).json({ msg: "Falta configurar OPENAI_API_KEY" });
-  }
-
+// NUEVA FUNCIÓN: Analizar PDF
+exports.analyzeContract = async (req, res) => {
   try {
-    // Hacemos la petición al modelo GPT-3.5 Turbo (rápido y económico)
+    if (!req.file) {
+      return res.status(400).json({ msg: "No se subió ningún archivo PDF" });
+    }
+
+    console.log("--- ANALIZANDO CONTRATO PDF ---");
+
+    // 1. Leemos el archivo PDF desde la carpeta uploads
+    const dataBuffer = fs.readFileSync(req.file.path);
+    
+    // 2. Extraemos el texto usando pdf-parse
+    const pdfData = await pdf(dataBuffer);
+    const contractText = pdfData.text;
+
+    // Validar que no esté vacío
+    if (!contractText || contractText.length < 50) {
+      return res.status(400).json({ msg: "No pude leer texto del PDF. Asegúrate de que no sea una imagen escaneada." });
+    }
+
+    // 3. Preparamos el Prompt para la IA
+    // Truco: Cortamos el texto si es muy largo para no gastar todos los tokens
+    const cleanText = contractText.substring(0, 15000); 
+
+    const prompt = `
+      Actúa como un abogado experto laboral. Analiza el siguiente texto extraído de un contrato de trabajo.
+      
+      Genera un reporte claro con estos 3 puntos:
+      1. 📄 **Resumen de Términos:** Tipo de contrato, horarios y sueldo (si aparece).
+      2. ✅ **Tus Derechos y Beneficios:** Qué ganas con este contrato.
+      3. ⚠️ **Ojo con esto (Prohibiciones y Letra Chica):** Qué cosas están estrictamente prohibidas o cláusulas delicadas.
+
+      Texto del contrato:
+      "${cleanText}"
+    `;
+
+    // 4. Enviamos a la IA (OpenAI en este caso)
     const completion = await openai.chat.completions.create({
       messages: [
-        { role: "system", content: "Eres un abogado experto en el código laboral chileno. Responde de forma clara, concisa y útil para un trabajador." },
-        { role: "user", content: question }
+        { role: "system", content: "Eres un asistente legal útil y protector con el trabajador." },
+        { role: "user", content: prompt }
       ],
-      model: "gpt-3.5-turbo",
+      model: "gpt-3.5-turbo", // O "gpt-4" si tienes acceso, es mejor para lecturas largas
     });
 
-    // Extraemos la respuesta
-    const text = completion.choices[0].message.content;
+    const analysis = completion.choices[0].message.content;
 
-    console.log("¡Respuesta de OpenAI recibida!");
-    res.json({ answer: text });
+    // 5. Borramos el archivo temporal para no llenar el servidor
+    fs.unlinkSync(req.file.path);
+
+    console.log("¡Análisis completado!");
+    res.json({ analysis });
 
   } catch (error) {
-    console.error("--- ERROR OPENAI ---");
-    // Manejo de errores comunes (como falta de crédito)
-    if (error.response) {
-        console.error(error.response.status);
-        console.error(error.response.data);
-    } else {
-        console.error(error.message);
-    }
-    
-    res.status(500).json({ 
-      msg: "Error conectando con OpenAI", 
-      details: "Verifica que tu API Key tenga créditos/saldo disponible." 
-    });
+    console.error("Error analizando contrato:", error);
+    res.status(500).json({ msg: "Error al procesar el documento", error: error.message });
   }
 };

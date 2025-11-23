@@ -5,6 +5,9 @@ import { askLegalAssistant } from '../services/aiService';
 import api from '../services/api';
 import { useTranslation } from 'react-i18next';
 
+const [analysisResult, setAnalysisResult] = useState(null);
+const [analyzing, setAnalyzing] = useState(false);
+
 const Profile = () => {
   const { user, login } = useAuth(); // Usamos login para actualizar el usuario en el contexto local
   const { t } = useTranslation();
@@ -307,7 +310,66 @@ const Profile = () => {
             )}
           </div>
         </div>
+{/* --- NUEVA SECCIÓN: ANALIZADOR DE CONTRATOS --- */}
+<div className="bg-white p-6 rounded-2xl shadow-md border-t-4 border-blue-500 mt-8 col-span-1 md:col-span-2">
+  <h3 className="text-xl font-bold mb-2 text-blue-800 flex items-center gap-2">
+    <span>⚖️</span> Analizador de Contratos Inteligente
+  </h3>
+  <p className="text-sm text-gray-600 mb-4">
+    Sube tu contrato en PDF y nuestra IA te explicará la "letra chica", tus derechos y prohibiciones.
+  </p>
 
+  <div className="flex flex-col md:flex-row gap-4 items-start">
+    {/* Input de Archivo */}
+    <label className="cursor-pointer bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 px-4 py-3 rounded-lg font-bold transition flex items-center gap-2">
+      <span>📤 Subir PDF del Contrato</span>
+      <input 
+        type="file" 
+        accept=".pdf"
+        className="hidden"
+        onChange={async (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+
+          setAnalyzing(true);
+          setAnalysisResult(null);
+
+          const formData = new FormData();
+          formData.append('contractPdf', file);
+
+          try {
+            // Llamamos a la nueva ruta
+            const res = await api.post('/ai/analyze', formData, {
+              headers: { 'Content-Type': 'multipart/form-data' }
+            });
+            setAnalysisResult(res.data.analysis);
+          } catch (err) {
+            alert("Error al analizar el contrato. Intenta con un PDF de texto seleccionable.");
+          } finally {
+            setAnalyzing(false);
+          }
+        }} 
+      />
+    </label>
+
+    {analyzing && (
+      <div className="flex items-center text-blue-600 font-medium animate-pulse mt-2">
+        ⏳ Leyendo y analizando tu contrato... esto puede tomar unos segundos.
+      </div>
+    )}
+  </div>
+
+  {/* RESULTADO DEL ANÁLISIS */}
+  {analysisResult && (
+    <div className="mt-6 bg-blue-50 p-6 rounded-xl border border-blue-200 animate-fade-in-up">
+      <h4 className="font-bold text-lg text-blue-900 mb-3">🔍 Resultado del Análisis:</h4>
+      {/* Usamos whitespace-pre-wrap para respetar los saltos de línea que manda la IA */}
+      <div className="prose text-gray-800 text-sm whitespace-pre-wrap leading-relaxed">
+        {analysisResult}
+      </div>
+    </div>
+  )}
+</div>
         {/* --- SECCIÓN 3: IA (Sin cambios, solo visual) --- */}
         <div className="bg-white p-6 rounded-2xl shadow-md border border-purple-100 h-fit">
           <h3 className="text-xl font-bold mb-4 text-purple-700 flex items-center gap-2">

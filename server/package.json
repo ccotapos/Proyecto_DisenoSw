@@ -18,6 +18,8 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^7.0.0",
     "mongoose": "^9.0.0",
-    "openai": "^6.9.1"
+    "multer": "^2.0.2",
+    "openai": "^6.9.1",
+    "pdf-parse": "^2.4.5"
   }
 }
