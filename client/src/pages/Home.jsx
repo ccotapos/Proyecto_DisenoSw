@@ -1,4 +1,3 @@
-import React from 'react';
 import React from 'react'; // Importante para evitar el error de pantalla gris
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
