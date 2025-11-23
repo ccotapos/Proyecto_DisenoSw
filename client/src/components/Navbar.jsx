@@ -24,7 +24,7 @@ const Navbar = () => {
       <div className="container mx-auto px-4 flex justify-between items-center">
         {/* Logo */}
         <Link to="/" className="text-2xl font-extrabold text-white tracking-tight hover:text-brand-accent transition">
-          GestoLaboral
+          Gestor Laboral
         </Link>
         
         {/* Menú Central - Solo visible si hay usuario logueado (Opcional, o siempre visible) */}
