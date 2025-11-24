@@ -6,3 +6,16 @@
 body {
   @apply bg-brand-light text-brand-dark;
 }
+
+/* PersonalizaciÃ³n React Calendar */
+.react-calendar {
+  border: none !important;
+  font-family: inherit !important;
+}
+.react-calendar__tile--active {
+  background: #00FFCD !important; /* Brand Accent */
+  color: #664C43 !important;
+}
+.react-calendar__tile--now {
+  background: #E3D3E4 !important;
+}
