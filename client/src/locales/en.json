@@ -1,82 +1,94 @@
 {
   "navbar": {
-    "brand": "LaborManager",
+    "brand": "Labor Manager",
     "dashboard": "Dashboard",
     "calculator": "Calculator",
     "profile": "Profile",
-    "logout": "Logout",
     "login": "Login",
+    "logout": "Logout",
     "hello": "Hello"
   },
+
   "home": {
     "welcome_title": "Simplified Labor Management",
     "welcome_subtitle": "Manage your vacations, overtime, and contracts in one place.",
-    "login_btn": "Start Now",
-    "vacation_calc": "Vacation Calculator",
+    "buttons": {
+      "login": "Start Now",
+      "vacation_calc": "Vacation Calculator"
+    },
     "cards": {
-      "holidays": "Legal Holidays",
-      "holidays_desc": "Updated consultation of days off according to Chilean law.",
-      "ai": "AI Advisory",
-      "ai_desc": "Solve doubts about contracts and overtime instantly.",
-      "vacations": "Vacations",
-      "vacations_desc": "Exact calculation of progressive and accumulated days."
+      "holidays_title": "Legal Holidays",
+      "holidays_desc": "Updated list of official holidays under Chilean law.",
+      "ai_title": "AI Legal Advisor",
+      "ai_desc": "Instant answers about contracts and overtime.",
+      "vacations_title": "Vacations",
+      "vacations_desc": "Accurate calculation of progressive and legal vacation days."
     }
   },
+
   "login": {
-    "welcome": "Welcome",
-    "create_account": "Create Account",
-    "subtitle_login": "Login to manage your hours",
-    "subtitle_register": "Enter your details to start",
-    "name": "Full Name",
+    "login_title": "Welcome",
+    "login_sub": "Log in to manage your hours",
+    "register_title": "Create Account",
+    "register_sub": "Enter your information to get started",
+    "fullname": "Full Name",
+    "fullname_placeholder": "John Doe",
     "email": "Email",
+    "email_placeholder": "name@example.com",
     "password": "Password",
-    "btn_login": "Login",
-    "btn_register": "Register",
-    "have_account": "Already have an account?",
+    "login_btn": "Login",
+    "register_btn": "Register",
     "no_account": "Don't have an account?",
-    "link_login": "Login here",
-    "link_register": "Register here",
+    "have_account": "Already have an account?",
+    "go_register": "Register here",
+    "go_login": "Login here",
     "or_continue": "Or continue with",
-    "error_google": "Google authentication failed"
-  },
-  "dashboard": {
-    "title": "Labor Control Panel",
-    "select_year": "Consult Holidays for Year:",
-    "loading": "Loading holidays...",
-    "no_data": "No data for this year",
-    "table": {
-      "date": "Date",
-      "title": "Holiday",
-      "type": "Type"
+    "errors": {
+      "credentials": "Incorrect email or password",
+      "register": "Registration failed",
+      "google": "Google authentication failed"
     }
   },
+
+  "dashboard": {
+    "title": "Labor Dashboard",
+    "year_label": "Check Holidays for Year:",
+    "year_placeholder": "Enter a year",
+    "loading": "Loading holidays or no data available..."
+  },
+
+  "profile": {
+    "register_title": "Register New Contract",
+    "company": "Company",
+    "role": "Role",
+    "start_date": "Start Date",
+    "save_contract": "Save Contract",
+    "contract_types": {
+      "indefinido": "Permanent",
+      "plazo_fijo": "Fixed Term",
+      "honorarios": "Contractor"
+    },
+    "no_contracts": "You have no registered contracts.",
+    "since": "Since",
+
+    "ai_title": "AI Legal Assistant",
+    "ai_desc": "Do you have questions about your contract? Ask me.",
+    "ai_placeholder": "Ask about your labor rights...",
+    "ask_button": "Ask Assistant",
+    "response": "Response",
+    "loading": "Thinking..."
+  },
+
   "calculator": {
     "title": "Vacation Calculator",
-    "label_antiquity": "Years of Service",
-    "btn_calc": "Calculate Days",
-    "result_title": "Your legal days:",
-    "base": "Base Days (Business Days)",
-    "progressive": "Progressive Days",
-    "total": "Total Days"
-  },
-  "profile": {
-    "contracts_title": "My Contracts",
-    "register_title": "Register New Contract",
-    "import_title": "Import Contract (PDF/Image)",
-    "import_desc": "Upload your scanned contract and we will save it.",
-    "btn_select_file": "Select File",
-    "form": {
-      "company": "Company",
-      "role": "Job Title",
-      "start_date": "Start Date",
-      "type": "Contract Type",
-      "btn_save": "Save Contract"
-    },
-    "ai_title": "AI Legal Assistant",
-    "ai_desc": "Doubts about your contract? Ask me.",
-    "ai_placeholder": "E.g., How many notice days do I need to resign?",
-    "btn_consult": "Consult",
-    "loading": "Thinking...",
-    "no_contracts": "You have no registered contracts."
+    "years_label": "Years of Work Seniority",
+    "years_placeholder": "Enter your years worked",
+    "calculate": "Calculate",
+    "your_days": "Your legal days:",
+    "base": "Base",
+    "progressive": "Progressive",
+    "total": "Total",
+    "days_habiles": "working days",
+    "days": "days"
   }
 }
