@@ -1,8 +1,8 @@
 {
   "navbar": {
-    "brand": "GestoLaboral",
+    "brand": "GestorLaboral",
     "dashboard": "Dashboard",
-    "calculator": "Calculadora",
+    "calculator": "Horas Extra",
     "profile": "Perfil",
     "logout": "Salir",
     "login": "Ingresar",
@@ -10,16 +10,16 @@
   },
   "home": {
     "welcome_title": "Gestión Laboral Simplificada",
-    "welcome_subtitle": "Controla tus vacaciones, horas extra y contratos en un solo lugar.",
+    "welcome_subtitle": "Controla tus horas extra y contratos en un solo lugar.",
     "login_btn": "Comenzar Ahora",
-    "vacation_calc": "Calculadora Vacaciones",
+    "vacation_calc": "Registrar Horas Extra",
     "cards": {
       "holidays": "Feriados Legales",
       "holidays_desc": "Consulta actualizada de días libres según la ley chilena.",
       "ai": "Asesoría IA",
       "ai_desc": "Resuelve dudas sobre contratos y horas extra al instante.",
-      "vacations": "Vacaciones",
-      "vacations_desc": "Cálculo exacto de días progresivos y acumulados."
+      "vacations": "Control de Horas",
+      "vacations_desc": "Lleva un registro de tus turnos extra y calcula cuánto debes cobrar."
     }
   },
   "login": {

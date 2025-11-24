@@ -32,7 +32,7 @@ const Navbar = () => {
           {user && (
             <>
               <Link to="/dashboard" className="hover:text-brand-accent transition">Dashboard</Link>
-              <Link to="/calculator" className="hover:text-brand-accent transition">Calculadora</Link>
+              <Link to="/calculator" className="hover:text-brand-accent transition">Horas Extra</Link>
               <Link to="/profile" className="hover:text-brand-accent transition">Perfil</Link>
             </>
           )}

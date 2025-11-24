@@ -47,7 +47,7 @@ const Home = () => {
         
         {/* Tarjeta 3 */}
         <div className="bg-white p-8 rounded-2xl shadow-md hover:shadow-xl transition duration-300 border-t-4 border-brand-secondary text-left group">
-          <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">🏖️</div>
+          <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">💰</div>
           <h3 className="font-bold text-2xl mb-3 text-brand-secondary">{t('home.cards.vacations')}</h3>
           <p className="text-brand-dark leading-relaxed">{t('home.cards.vacations_desc')}</p>
         </div>

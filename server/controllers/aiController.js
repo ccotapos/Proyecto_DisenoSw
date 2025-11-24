@@ -1,68 +1,82 @@
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 const fs = require('fs');
 const pdf = require('pdf-parse');
-const OpenAI = require("openai"); // O GoogleGenerativeAI si volviste a Gemini
 
-// Configuración (Asegúrate de tener esto según tu IA actual)
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+// 1. Función para el Chat Legal
+exports.consultAI = async (req, res) => {
+  const { question } = req.body;
 
-// ... tu función consultAI existente ...
+  if (!process.env.GEMINI_API_KEY) {
+    return res.status(500).json({ msg: "Falta configurar GEMINI_API_KEY" });
+  }
 
-// NUEVA FUNCIÓN: Analizar PDF
+  try {
+    // Configuración del modelo
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    const prompt = `Actúa como un abogado experto en el código laboral chileno. Responde de forma clara, concisa y útil para un trabajador a la siguiente pregunta: ${question}`;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+
+    res.json({ answer: text });
+
+  } catch (error) {
+    console.error("Error Gemini Chat:", error);
+    res.status(500).json({ msg: "Error conectando con IA", details: error.message });
+  }
+};
+
+// 2. Función para Analizar Contratos (PDF)
 exports.analyzeContract = async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ msg: "No se subió ningún archivo PDF" });
     }
 
-    console.log("--- ANALIZANDO CONTRATO PDF ---");
+    console.log("--- ANALIZANDO CON GEMINI ---");
 
-    // 1. Leemos el archivo PDF desde la carpeta uploads
+    // A. Leemos el PDF y extraemos el texto
     const dataBuffer = fs.readFileSync(req.file.path);
-    
-    // 2. Extraemos el texto usando pdf-parse
     const pdfData = await pdf(dataBuffer);
     const contractText = pdfData.text;
 
-    // Validar que no esté vacío
+    // Validación básica
     if (!contractText || contractText.length < 50) {
-      return res.status(400).json({ msg: "No pude leer texto del PDF. Asegúrate de que no sea una imagen escaneada." });
+      return res.status(400).json({ msg: "No se pudo leer texto del PDF. Verifica que no sea una imagen escaneada." });
     }
 
-    // 3. Preparamos el Prompt para la IA
-    // Truco: Cortamos el texto si es muy largo para no gastar todos los tokens
-    const cleanText = contractText.substring(0, 15000); 
+    // B. Configuramos Gemini
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
+    // C. Preparamos el Prompt (Gemini soporta mucho texto, así que enviamos todo)
     const prompt = `
-      Actúa como un abogado experto laboral. Analiza el siguiente texto extraído de un contrato de trabajo.
-      
-      Genera un reporte claro con estos 3 puntos:
-      1. 📄 **Resumen de Términos:** Tipo de contrato, horarios y sueldo (si aparece).
-      2. ✅ **Tus Derechos y Beneficios:** Qué ganas con este contrato.
-      3. ⚠️ **Ojo con esto (Prohibiciones y Letra Chica):** Qué cosas están estrictamente prohibidas o cláusulas delicadas.
+      Actúa como un abogado laboral experto y protector de los derechos del trabajador.
+      Analiza el siguiente texto extraído de un contrato de trabajo y genera un reporte con estos 3 puntos:
 
-      Texto del contrato:
-      "${cleanText}"
+      1. 📄 **Resumen de Condiciones:** (Cargo, Sueldo, Horario, Plazo).
+      2. ✅ **Beneficios y Derechos:** Qué gana el trabajador.
+      3. ⚠️ **Cláusulas de Cuidado:** Prohibiciones, multas o términos complejos explicados fácil.
+
+      --- TEXTO DEL CONTRATO ---
+      ${contractText}
     `;
 
-    // 4. Enviamos a la IA (OpenAI en este caso)
-    const completion = await openai.chat.completions.create({
-      messages: [
-        { role: "system", content: "Eres un asistente legal útil y protector con el trabajador." },
-        { role: "user", content: prompt }
-      ],
-      model: "gpt-3.5-turbo", // O "gpt-4" si tienes acceso, es mejor para lecturas largas
-    });
+    // D. Generamos la respuesta
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const analysis = response.text();
 
-    const analysis = completion.choices[0].message.content;
+    // E. Limpieza
+    fs.unlinkSync(req.file.path); // Borramos el archivo temporal
 
-    // 5. Borramos el archivo temporal para no llenar el servidor
-    fs.unlinkSync(req.file.path);
-
-    console.log("¡Análisis completado!");
     res.json({ analysis });
 
   } catch (error) {
-    console.error("Error analizando contrato:", error);
+    console.error("Error Gemini PDF:", error);
     res.status(500).json({ msg: "Error al procesar el documento", error: error.message });
   }
 };
