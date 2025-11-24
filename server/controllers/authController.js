@@ -2,11 +2,25 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+// Función auxiliar para generar respuesta de usuario completa
+const generateUserResponse = (user) => {
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    // AQUÍ ESTABA EL PROBLEMA: Faltaba devolver estos campos al loguearse
+    photo: user.photo,
+    position: user.position,
+    phone: user.phone,
+    address: user.address,
+    googleId: user.googleId
+  };
+};
+
 // 1. REGISTRO
 exports.register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    
     let user = await User.findOne({ email });
     if (user) return res.status(400).json({ msg: 'El usuario ya existe' });
 
@@ -19,9 +33,9 @@ exports.register = async (req, res) => {
     const payload = { user: { id: user.id } };
     jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '5h' }, (err, token) => {
       if (err) throw err;
-      res.json({ token, user: { id: user.id, name: user.name, email: user.email } });
+      // Usamos la función auxiliar para devolver todo
+      res.json({ token, user: generateUserResponse(user) });
     });
-
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Error en el servidor');
@@ -41,7 +55,7 @@ exports.login = async (req, res) => {
     const payload = { user: { id: user.id } };
     jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '5h' }, (err, token) => {
       if (err) throw err;
-      res.json({ token, user: { id: user.id, name: user.name, email: user.email } });
+      res.json({ token, user: generateUserResponse(user) });
     });
   } catch (err) {
     console.error(err.message);
@@ -49,49 +63,56 @@ exports.login = async (req, res) => {
   }
 };
 
-// 3. LOGIN CON GOOGLE (La función que te faltaba o fallaba)
+// 3. LOGIN CON GOOGLE
 exports.googleLogin = async (req, res) => {
   const { name, email, googleId } = req.body;
-
   try {
     let user = await User.findOne({ email });
-
     if (user) {
-      // Usuario existe: actualizamos ID y entramos
       user.googleId = googleId;
       await user.save();
     } else {
-      // Usuario nuevo: lo creamos
       const randomPassword = Math.random().toString(36).slice(-8); 
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(randomPassword, salt);
-
-      user = new User({
-        name,
-        email,
-        password: hashedPassword,
-        googleId
-      });
+      user = new User({ name, email, password: hashedPassword, googleId });
       await user.save();
     }
-
     const payload = { user: { id: user.id } };
-    
-    jwt.sign(
-      payload, 
-      process.env.JWT_SECRET, 
-      { expiresIn: '5h' }, 
-      (err, token) => {
-        if (err) throw err;
-        res.json({ 
-          token, 
-          user: { id: user.id, name: user.name, email: user.email } 
-        });
-      }
-    );
-
+    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '5h' }, (err, token) => {
+      if (err) throw err;
+      res.json({ token, user: generateUserResponse(user) });
+    });
   } catch (err) {
     console.error("Error en Google Login:", err.message);
+    res.status(500).send('Error del servidor');
+  }
+};
+
+// 4. ACTUALIZAR PERFIL
+exports.updateProfile = async (req, res) => {
+  try {
+    const { name, position, phone, address, photo } = req.body;
+    const profileFields = {};
+    if (name) profileFields.name = name;
+    if (position) profileFields.position = position;
+    if (phone) profileFields.phone = phone;
+    if (address) profileFields.address = address;
+    if (photo) profileFields.photo = photo;
+
+    let user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ msg: 'Usuario no encontrado' });
+
+    user = await User.findByIdAndUpdate(
+      req.user.id,
+      { $set: profileFields },
+      { new: true, select: '-password' }
+    );
+    // Devolvemos el usuario completo actualizado
+    res.json(generateUserResponse(user)); 
+
+  } catch (err) {
+    console.error("Error al actualizar perfil:", err.message);
     res.status(500).send('Error del servidor');
   }
 };

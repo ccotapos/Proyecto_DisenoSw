@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const { register, login, googleLogin, updateProfile } = require('../controllers/authController');
+const auth = require('../middleware/auth');
 
-// IMPORTANTE: Aquí estamos trayendo las 3 funciones. 
-// Si authController no las exporta bien, esto falla.
-const { register, login, googleLogin } = require('../controllers/authController');
 
 router.post('/register', register);
 router.post('/login', login);
 router.post('/google', googleLogin); 
+router.put('/profile', auth, updateProfile); 
 
 module.exports = router;

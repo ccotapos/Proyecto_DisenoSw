@@ -1,16 +1,54 @@
 {
-  "welcome_title": "Simplified Labor Management",
-  "welcome_subtitle": "Manage your vacations, overtime, and contracts in one place.",
-  "login_btn": "Login",
-  "logout_btn": "Logout",
-  "google_login": "Continue with Google",
-  "profile": "My Profile",
-  "contracts": "My Contracts",
-  "vacation_calc": "Vacation Calculator",
-  "ask_ai": "AI Legal Assistant",
-  "ask_placeholder": "Ask about labor laws (e.g., Is working 12 hours legal?)",
-  "loading": "Loading...",
-  "error": "An error occurred",
+  "navbar": {
+    "brand": "Labor Manager",
+    "dashboard": "Dashboard",
+    "calculator": "Calculator",
+    "profile": "Profile",
+    "login": "Login",
+    "logout": "Logout",
+    "hello": "Hello"
+  },
+
+  "home": {
+    "welcome_title": "Simplified Labor Management",
+    "welcome_subtitle": "Manage your vacations, overtime, and contracts in one place.",
+    "buttons": {
+      "login": "Start Now",
+      "vacation_calc": "Vacation Calculator"
+    },
+    "cards": {
+      "holidays_title": "Legal Holidays",
+      "holidays_desc": "Updated list of official holidays under Chilean law.",
+      "ai_title": "AI Legal Advisor",
+      "ai_desc": "Instant answers about contracts and overtime.",
+      "vacations_title": "Vacations",
+      "vacations_desc": "Accurate calculation of progressive and legal vacation days."
+    }
+  },
+
+  "login": {
+    "login_title": "Welcome",
+    "login_sub": "Log in to manage your hours",
+    "register_title": "Create Account",
+    "register_sub": "Enter your information to get started",
+    "fullname": "Full Name",
+    "fullname_placeholder": "John Doe",
+    "email": "Email",
+    "email_placeholder": "name@example.com",
+    "password": "Password",
+    "login_btn": "Login",
+    "register_btn": "Register",
+    "no_account": "Don't have an account?",
+    "have_account": "Already have an account?",
+    "go_register": "Register here",
+    "go_login": "Login here",
+    "or_continue": "Or continue with",
+    "errors": {
+      "credentials": "Incorrect email or password",
+      "register": "Registration failed",
+      "google": "Google authentication failed"
+    }
+  },
 
   "dashboard": {
     "title": "Labor Dashboard",
@@ -19,22 +57,29 @@
     "loading": "Loading holidays or no data available..."
   },
 
-  "profile_section": {
-    "register_contract": "Register New Contract",
+  "profile": {
+    "register_title": "Register New Contract",
     "company": "Company",
     "role": "Role",
-    "indefinido": "Permanent",
-    "plazo_fijo": "Fixed Term",
-    "honorarios": "Contractor",
     "start_date": "Start Date",
     "save_contract": "Save Contract",
+    "contract_types": {
+      "indefinido": "Permanent",
+      "plazo_fijo": "Fixed Term",
+      "honorarios": "Contractor"
+    },
     "no_contracts": "You have no registered contracts.",
     "since": "Since",
-    "ai_description": "Do you have questions about your new contract? Ask me.",
-    "ask_button": "Ask Legal Assistant",
-    "response": "Response"
+
+    "ai_title": "AI Legal Assistant",
+    "ai_desc": "Do you have questions about your contract? Ask me.",
+    "ai_placeholder": "Ask about your labor rights...",
+    "ask_button": "Ask Assistant",
+    "response": "Response",
+    "loading": "Thinking..."
   },
-  "vacation_calc_section": {
+
+  "calculator": {
     "title": "Vacation Calculator",
     "years_label": "Years of Work Seniority",
     "years_placeholder": "Enter your years worked",
@@ -45,55 +90,5 @@
     "total": "Total",
     "days_habiles": "working days",
     "days": "days"
-  },
-   "home_cards": {
-    "holidays_title": "Legal Holidays",
-    "holidays_desc": "Updated list of official holidays according to Chilean law to plan ahead.",
-    "ai_title": "AI Advisor",
-    "ai_desc": "Instant answers about contracts and overtime with our assistant.",
-    "vacations_title": "Vacations",
-    "vacations_desc": "Accurate calculation of progressive and accumulated days based on your seniority."
-  },
-  "login": {
-  "login_title": "Welcome",
-  "login_sub": "Log in to manage your hours",
-  "register_title": "Create Account",
-  "register_sub": "Enter your information to get started",
-
-  "fullname": "Full Name",
-  "fullname_placeholder": "John Doe",
-
-  "email": "Email",
-  "email_placeholder": "name@example.com",
-
-  "password": "Password",
-
-  "login_btn": "Login",
-  "register_btn": "Register",
-
-  "no_account": "Don't have an account?",
-  "have_account": "Already have an account?",
-
-  "go_register": "Register here",
-  "go_login": "Login here",
-
-  "or_continue": "Or continue with",
-
-  "errors": {
-    "credentials": "Incorrect email or password",
-    "register": "Registration failed",
-    "google": "Google authentication failed"
-  }
-},
-"navbar": {
-  "title": "Labor Manager",
-  "dashboard": "Dashboard",
-  "calculator": "Calculator",
-  "profile": "Profile"
-},
-  
-
-  "auth": {
-    "must_login": "You must log in."
   }
 }
