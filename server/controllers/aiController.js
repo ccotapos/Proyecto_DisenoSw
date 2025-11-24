@@ -2,81 +2,84 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const fs = require('fs');
 const pdf = require('pdf-parse');
 
-// 1. Función para el Chat Legal
+// FUNCIÓN MAESTRA: Intenta con varios modelos hasta que uno funcione
+async function generateWithFallback(prompt, questionForChat = null) {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) throw new Error("Falta GEMINI_API_KEY en .env");
+
+  const genAI = new GoogleGenerativeAI(apiKey);
+  
+  // Lista de modelos a probar en orden. Si el 1.5 falla, salta al pro.
+  const modelsToTry = ["gemini-1.5-flash", "gemini-pro", "gemini-1.0-pro"];
+  
+  let lastError = null;
+
+  for (const modelName of modelsToTry) {
+    try {
+      console.log(`🔄 Intentando conectar con modelo: ${modelName}...`);
+      const model = genAI.getGenerativeModel({ model: modelName });
+      
+      const content = questionForChat 
+        ? `Eres un abogado experto en código laboral chileno. Responde: ${questionForChat}` 
+        : prompt;
+
+      const result = await model.generateContent(content);
+      const response = await result.response;
+      const text = response.text();
+      
+      console.log(`✅ Éxito con ${modelName}`);
+      return text; // Si funcionó, retornamos y terminamos el bucle
+      
+    } catch (error) {
+      console.warn(`❌ Falló ${modelName}: ${error.message}`);
+      lastError = error;
+      // Continuamos al siguiente modelo...
+    }
+  }
+  throw new Error(`Todos los modelos fallaron. Último error: ${lastError.message}`);
+}
+
+// 1. CONTROLADOR CHAT
 exports.consultAI = async (req, res) => {
   const { question } = req.body;
-
-  if (!process.env.GEMINI_API_KEY) {
-    return res.status(500).json({ msg: "Falta configurar GEMINI_API_KEY" });
-  }
-
   try {
-    // Configuración del modelo
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-    const prompt = `Actúa como un abogado experto en el código laboral chileno. Responde de forma clara, concisa y útil para un trabajador a la siguiente pregunta: ${question}`;
-
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-
-    res.json({ answer: text });
-
+    const answer = await generateWithFallback(null, question);
+    res.json({ answer });
   } catch (error) {
-    console.error("Error Gemini Chat:", error);
-    res.status(500).json({ msg: "Error conectando con IA", details: error.message });
+    console.error("Error Fatal Chat:", error);
+    res.status(500).json({ msg: "Error de IA", details: error.message });
   }
 };
 
-// 2. Función para Analizar Contratos (PDF)
+// 2. CONTROLADOR PDF
 exports.analyzeContract = async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ msg: "No se subió ningún archivo PDF" });
-    }
+    if (!req.file) return res.status(400).json({ msg: "Falta PDF" });
 
-    console.log("--- ANALIZANDO CON GEMINI ---");
-
-    // A. Leemos el PDF y extraemos el texto
+    console.log("--- LEYENDO PDF ---");
     const dataBuffer = fs.readFileSync(req.file.path);
     const pdfData = await pdf(dataBuffer);
-    const contractText = pdfData.text;
+    const contractText = pdfData.text.substring(0, 25000); // Límite seguro
 
-    // Validación básica
-    if (!contractText || contractText.length < 50) {
-      return res.status(400).json({ msg: "No se pudo leer texto del PDF. Verifica que no sea una imagen escaneada." });
-    }
+    if (contractText.length < 50) throw new Error("PDF vacío o ilegible");
 
-    // B. Configuramos Gemini
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-    // C. Preparamos el Prompt (Gemini soporta mucho texto, así que enviamos todo)
     const prompt = `
-      Actúa como un abogado laboral experto y protector de los derechos del trabajador.
-      Analiza el siguiente texto extraído de un contrato de trabajo y genera un reporte con estos 3 puntos:
-
-      1. 📄 **Resumen de Condiciones:** (Cargo, Sueldo, Horario, Plazo).
-      2. ✅ **Beneficios y Derechos:** Qué gana el trabajador.
-      3. ⚠️ **Cláusulas de Cuidado:** Prohibiciones, multas o términos complejos explicados fácil.
-
-      --- TEXTO DEL CONTRATO ---
+      Analiza este contrato laboral chileno y resume:
+      1. Condiciones (Sueldo, Cargo, Horario).
+      2. Beneficios explícitos.
+      3. Prohibiciones o multas.
+      --- TEXTO ---
       ${contractText}
     `;
 
-    // D. Generamos la respuesta
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const analysis = response.text();
-
-    // E. Limpieza
-    fs.unlinkSync(req.file.path); // Borramos el archivo temporal
-
+    const analysis = await generateWithFallback(prompt);
+    
+    fs.unlinkSync(req.file.path);
     res.json({ analysis });
 
   } catch (error) {
-    console.error("Error Gemini PDF:", error);
-    res.status(500).json({ msg: "Error al procesar el documento", error: error.message });
+    console.error("Error Fatal PDF:", error);
+    if (req.file && fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
+    res.status(500).json({ msg: "Error analizando documento", details: error.message });
   }
 };
