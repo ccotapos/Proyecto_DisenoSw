@@ -1,14 +1,15 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const Contract = require('../models/Contract'); 
+const WorkEntry = require('../models/WorkEntry');
+const Vacation = require('../models/vacation');
 
-// Función auxiliar para generar respuesta de usuario completa
 const generateUserResponse = (user) => {
   return {
     id: user.id,
     name: user.name,
     email: user.email,
-    // AQUÍ ESTABA EL PROBLEMA: Faltaba devolver estos campos al loguearse
     photo: user.photo,
     position: user.position,
     phone: user.phone,
@@ -17,7 +18,6 @@ const generateUserResponse = (user) => {
   };
 };
 
-// 1. REGISTRO
 exports.register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -33,7 +33,6 @@ exports.register = async (req, res) => {
     const payload = { user: { id: user.id } };
     jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '5h' }, (err, token) => {
       if (err) throw err;
-      // Usamos la función auxiliar para devolver todo
       res.json({ token, user: generateUserResponse(user) });
     });
   } catch (err) {
@@ -42,7 +41,6 @@ exports.register = async (req, res) => {
   }
 };
 
-// 2. LOGIN MANUAL
 exports.login = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -63,33 +61,53 @@ exports.login = async (req, res) => {
   }
 };
 
-// 3. LOGIN CON GOOGLE
+
 exports.googleLogin = async (req, res) => {
-  const { name, email, googleId } = req.body;
+  const { name, email, googleId, photo } = req.body; 
+
   try {
     let user = await User.findOne({ email });
+
     if (user) {
-      user.googleId = googleId;
-      await user.save();
+      if (!user.googleId) {
+        user.googleId = googleId;
+        await user.save();
+      }
     } else {
-      const randomPassword = Math.random().toString(36).slice(-8); 
+      const randomPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(randomPassword, salt);
-      user = new User({ name, email, password: hashedPassword, googleId });
+
+      user = new User({
+        name,
+        email,
+        password: hashedPassword,
+        googleId,
+        photo: photo || "" 
+      });
+      
       await user.save();
     }
+
     const payload = { user: { id: user.id } };
-    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '5h' }, (err, token) => {
-      if (err) throw err;
-      res.json({ token, user: generateUserResponse(user) });
-    });
+    
+    jwt.sign(
+      payload, 
+      process.env.JWT_SECRET, 
+      { expiresIn: '5h' }, 
+      (err, token) => {
+        if (err) throw err;
+        res.json({ token, user: generateUserResponse(user) });
+      }
+    );
+
   } catch (err) {
     console.error("Error en Google Login:", err.message);
-    res.status(500).send('Error del servidor');
+    res.status(500).send('Error del servidor al conectar con Google');
   }
 };
 
-// 4. ACTUALIZAR PERFIL
+
 exports.updateProfile = async (req, res) => {
   try {
     const { name, position, phone, address, photo } = req.body;
@@ -108,11 +126,34 @@ exports.updateProfile = async (req, res) => {
       { $set: profileFields },
       { new: true, select: '-password' }
     );
-    // Devolvemos el usuario completo actualizado
+
     res.json(generateUserResponse(user)); 
 
   } catch (err) {
     console.error("Error al actualizar perfil:", err.message);
     res.status(500).send('Error del servidor');
+  }
+};
+
+exports.deleteAccount = async (req, res) => {
+  try {
+    const userId = req.user.id; 
+
+
+    await Contract.deleteMany({ userId: userId });
+
+
+    await WorkEntry.deleteMany({ userId: userId });
+
+
+    await Vacation.deleteMany({ userId: userId });
+
+    await User.findByIdAndDelete(userId);
+
+    res.json({ msg: 'Cuenta y datos eliminados permanentemente.' });
+
+  } catch (err) {
+    console.error("Error eliminando cuenta:", err.message);
+    res.status(500).send('Error del servidor al eliminar cuenta');
   }
 };

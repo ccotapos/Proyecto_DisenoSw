@@ -49,18 +49,25 @@ const Login = () => {
     }
   };
 
-  const handleGoogleSuccess = async (credentialResponse) => {
+const handleGoogleSuccess = async (credentialResponse) => {
     try {
       const decoded = jwtDecode(credentialResponse.credential);
+      
+      console.log("Datos recibidos de Google:", decoded); 
+
       const res = await api.post('/auth/google', {
-        name: decoded.name,
-        email: decoded.email,
-        googleId: decoded.sub
+        name: decoded.name,       
+        email: decoded.email,    
+        googleId: decoded.sub,    
+        photo: decoded.picture    
       });
+
       login(res.data.user, res.data.token);
       navigate('/dashboard');
+
     } catch (err) {
-      setError('Falló la autenticación con Google');
+      console.error("Error Google Frontend:", err);
+      setError('Falló la autenticación con Google. Intenta nuevamente.');
     }
   };
 

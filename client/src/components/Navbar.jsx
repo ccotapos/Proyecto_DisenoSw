@@ -34,6 +34,12 @@ const Navbar = () => {
               <Link to="/dashboard" className="hover:text-brand-accent transition">Dashboard</Link>
               <Link to="/calculator" className="hover:text-brand-accent transition">Horas Extra</Link>
               <Link to="/profile" className="hover:text-brand-accent transition">Perfil</Link>
+              <Link to="/ai-assistant" className="hover:text-brand-accent transition flex items-center gap-1">
+      <span></span> IA Legal
+    </Link>
+              <Link to="/vacations" className="hover:text-brand-accent transition">
+  Vacaciones
+</Link>
             </>
           )}
         </div>
@@ -69,6 +75,7 @@ const Navbar = () => {
             >
               {t('login_btn', 'Ingresar')}
             </Link>
+            
           )}
         </div>
       </div>

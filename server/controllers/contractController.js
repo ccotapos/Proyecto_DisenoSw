@@ -1,6 +1,6 @@
 const Contract = require('../models/Contract');
 
-// 1. Obtener contratos
+
 exports.getContracts = async (req, res) => {
   try {
     const contracts = await Contract.find({ userId: req.user.id }).sort({ startDate: -1 });
@@ -10,7 +10,6 @@ exports.getContracts = async (req, res) => {
   }
 };
 
-// 2. Agregar contrato manual
 exports.addContract = async (req, res) => {
   try {
     const { company, role, startDate, type, hoursPerWeek } = req.body;
@@ -30,7 +29,6 @@ exports.addContract = async (req, res) => {
   }
 };
 
-// 3. Subir archivo (Upload)
 exports.uploadContract = async (req, res) => {
   try {
     if (!req.file) {
@@ -52,7 +50,7 @@ exports.uploadContract = async (req, res) => {
   }
 };
 
-// 4. Actualizar Contrato (Update)
+
 exports.updateContract = async (req, res) => {
   try {
     let contract = await Contract.findById(req.params.id);

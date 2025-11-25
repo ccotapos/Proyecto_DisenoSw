@@ -1,9 +1,8 @@
 const WorkEntry = require('../models/WorkEntry');
 
-// 1. OBTENER HISTORIAL (READ)
+
 exports.getEntries = async (req, res) => {
   try {
-    // Buscamos solo las del usuario logueado y ordenamos por fecha (más reciente primero)
     const entries = await WorkEntry.find({ userId: req.user.id }).sort({ date: -1 });
     res.json(entries);
   } catch (err) {
@@ -12,7 +11,7 @@ exports.getEntries = async (req, res) => {
   }
 };
 
-// 2. CREAR REGISTRO (CREATE)
+
 exports.createEntry = async (req, res) => {
   const { date, hoursWorked, isOvertime, notes } = req.body;
 
@@ -33,14 +32,12 @@ exports.createEntry = async (req, res) => {
   }
 };
 
-// 3. ELIMINAR REGISTRO (DELETE)
+
 exports.deleteEntry = async (req, res) => {
   try {
     let entry = await WorkEntry.findById(req.params.id);
 
     if (!entry) return res.status(404).json({ msg: 'Registro no encontrado' });
-
-    // Verificar que el registro pertenezca al usuario que lo quiere borrar
     if (entry.userId.toString() !== req.user.id) {
       return res.status(401).json({ msg: 'No autorizado' });
     }

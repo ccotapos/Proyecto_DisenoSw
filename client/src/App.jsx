@@ -7,19 +7,60 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Calculator from './pages/Calculator';
 import Profile from './pages/Profile';
+import VacationPlanner from './pages/VacationPlanner';
+import ProtectedRoute from './components/ProtectedRoute';
+import AiAssistant from './pages/AiAssistant';
 
 function App() {
   return (
-    // 1. El AuthProvider debe envolver todo para que "user" exista en todas partes
     <AuthProvider>
       <BrowserRouter>
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/calculator" element={<Calculator />} />
-            <Route path="/profile" element={<Profile />} />
+
+            {/* Rutas Privadas (Protegidas por el Guardia) */}
+            <Route 
+              path="/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/calculator" 
+              element={
+                <ProtectedRoute>
+                  <Calculator />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+  path="/ai-assistant" 
+  element={
+    <ProtectedRoute>
+      <AiAssistant />
+    </ProtectedRoute>
+  } 
+/>
+            <Route 
+              path="/vacations" 
+              element={
+                <ProtectedRoute>
+                  <VacationPlanner />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/profile" 
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              } 
+            />
           </Routes>
         </Layout>
       </BrowserRouter>

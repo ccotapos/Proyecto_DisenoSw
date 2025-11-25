@@ -19,6 +19,7 @@
     "mongodb": "^7.0.0",
     "mongoose": "^9.0.0",
     "multer": "^2.0.2",
-    "pdf-parse": "^2.4.5"
+    "pdf-parse": "^2.4.5",
+    "pdfjs-dist": "^5.4.394"
   }
 }
