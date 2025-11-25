@@ -9,4 +9,4 @@ const VacationSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('Vacation', VacationSchema);
+module.exports = mongoose.models.Vacation || mongoose.model('Vacation', VacationSchema);

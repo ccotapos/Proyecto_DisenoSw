@@ -1,6 +1,9 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const Contract = require('../models/Contract'); 
+const WorkEntry = require('../models/WorkEntry');
+const Vacation = require('../models/vacation');
 
 const generateUserResponse = (user) => {
   return {
@@ -129,5 +132,28 @@ exports.updateProfile = async (req, res) => {
   } catch (err) {
     console.error("Error al actualizar perfil:", err.message);
     res.status(500).send('Error del servidor');
+  }
+};
+
+exports.deleteAccount = async (req, res) => {
+  try {
+    const userId = req.user.id; 
+
+
+    await Contract.deleteMany({ userId: userId });
+
+
+    await WorkEntry.deleteMany({ userId: userId });
+
+
+    await Vacation.deleteMany({ userId: userId });
+
+    await User.findByIdAndDelete(userId);
+
+    res.json({ msg: 'Cuenta y datos eliminados permanentemente.' });
+
+  } catch (err) {
+    console.error("Error eliminando cuenta:", err.message);
+    res.status(500).send('Error del servidor al eliminar cuenta');
   }
 };

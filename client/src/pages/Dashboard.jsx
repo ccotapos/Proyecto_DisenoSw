@@ -201,11 +201,9 @@ const Dashboard = () => {
           <div className="bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group">
             <div className="relative z-10">
               <h3 className="font-bold text-lg mb-2">{t('dashboard.legal_questions')}</h3>
-              <p className="text-sm opacity-90 mb-4">
-                {t('dashboard.ai_desc')}
-              </p>
+              <p className="text-sm opacity-90 mb-4">{t('dashboard.ai_desc')}</p>
               <Link
-                to="/profile"
+                to="/ai-assistant"
                 className="inline-block bg-white text-purple-700 px-4 py-2 rounded-lg font-bold text-sm hover:bg-opacity-90 transition shadow"
               >
                 {t('dashboard.consult_now')}

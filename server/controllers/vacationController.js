@@ -29,7 +29,7 @@ exports.addVacation = async (req, res) => {
 exports.deleteVacation = async (req, res) => {
   try {
     await Vacation.findByIdAndDelete(req.params.id);
-    res.json({ msg: 'VacaciÃ³n eliminada' });
+    res.json({ msg: 'Vacación eliminada' });
   } catch (err) {
     res.status(500).send('Error al eliminar');
   }
