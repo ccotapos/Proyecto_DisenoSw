@@ -1,185 +1,184 @@
 {
   "navbar": {
-    "brand": "Labor Manager",
+    "brand": "Gestor Laboral",
     "dashboard": "Dashboard",
-    "calculator": "Calculadora",
+    "calculator": "Horas Extra",
+    "ai": "IA Legal",
+    "vacations": "Vacaciones",
     "profile": "Perfil",
+    "logout": "Salir",
     "login": "Ingresar",
-    "logout": "Cerrar sesión",
     "hello": "Hola"
   },
-  "home": {
+ "home": {
     "welcome_title": "Gestión Laboral Simplificada",
-    "welcome_subtitle": "Administra tus vacaciones, horas extra y contratos en un solo lugar.",
-    "buttons": {
-      "login": "Comenzar",
-      "vacation_calc": "Calculadora de Vacaciones"
-    },
+    "welcome_subtitle": "Controla tus vacaciones, horas extra y contratos en un solo lugar.",
+    "login_btn": "Comenzar Ahora",
+    "vacation_calc": "Registrar Horas Extra",
     "cards": {
-      "holidays_title": "Feriados",
-      "holidays_desc": "Lista actualizada de feriados legales en Chile.",
-      "ai_title": "Asistente Legal IA",
-      "ai_desc": "Respuestas instantáneas sobre contratos y horas extra.",
-      "vacations_title": "Vacaciones",
-      "vacations_desc": "Cálculo preciso de días legales y progresivos."
+      "holidays": "Feriados Legales",
+      "holidays_desc": "Consulta actualizada de días libres según la ley chilena.",
+      "ai": "Asesoría IA",
+      "ai_desc": "Resuelve dudas sobre contratos y horas extra al instante.",
+      "overtime": "Control de Horas Extra", 
+      "overtime_desc": "Lleva un registro de tus turnos extra y calcula cuánto debes cobrar."
     }
   },
   "login": {
-    "login_title": "Bienvenido",
-    "login_sub": "Ingresa para gestionar tus horas",
-    "register_title": "Crear Cuenta",
-    "register_sub": "Ingresa tus datos para comenzar",
-    "fullname": "Nombre Completo",
-    "fullname_placeholder": "Juan Pérez",
-    "email": "Correo Electrónico",
-    "email_placeholder": "nombre@ejemplo.com",
+    "welcome": "Bienvenido",
+    "create_account": "Crear Cuenta",
+    "subtitle_login": "Ingresa para gestionar tus horas",
+    "subtitle_register": "Ingresa tus datos para comenzar",
+    "name": "Nombre Completo",
+    "email": "Email",
     "password": "Contraseña",
-    "login_btn": "Iniciar Sesión",
-    "register_btn": "Registrarse",
-    "no_account": "¿No tienes cuenta?",
+    "btn_login": "Iniciar Sesión",
+    "btn_register": "Registrarse",
     "have_account": "¿Ya tienes cuenta?",
-    "go_register": "Regístrate aquí",
-    "go_login": "Inicia sesión aquí",
+    "no_account": "¿No tienes cuenta?",
+    "link_login": "Inicia Sesión aquí",
+    "link_register": "Regístrate aquí",
     "or_continue": "O continúa con",
-    "errors": {
-      "credentials": "Correo o contraseña incorrectos",
-      "register": "Error al registrar usuario",
-      "google": "Falló la autenticación con Google"
-    },
-    "must_login": "Debes iniciar sesión para ver esta página"
+    "error_google": "Falló la autenticación con Google"
   },
   "dashboard": {
-    "loading": "Cargando...",
-    "greeting": "Hola, {{name}} 👋",
-    "subtitle": "Bienvenido a tu panel de gestión laboral.",
-    "position": "Cargo: {{position}}",
-    "status": "Estado",
-    "active": "🟢 Activo",
-    "total_overtime": "Horas Extra Totales",
-    "view_details": "Ver detalles",
-    "current_contracts": "Contratos Vigentes",
-    "manage": "Gestionar",
-    "last_activity": "⏱️ Última Actividad",
-    "register_new": "Registrar Nuevo",
-    "no_recent_overtime": "No has registrado horas extra recientemente.",
-    "overtime_registered": "Turno Extra Registrado",
-    "no_notes": "Sin notas",
-    "hours": "hrs",
-    "upcoming_holidays": "Próximos Feriados",
-    "loading_calendar": "Cargando calendario...",
-    "view_full_calendar": "Ver calendario completo",
-    "legal_questions": "¿Dudas Legales?",
-    "ai_desc": "Nuestra IA analiza contratos y responde preguntas laborales.",
-    "consult_now": "Consultar Ahora"
+    "title": "Panel de Control",
+    "active": "Activo",
+    "stats": {
+      "hours": "Horas Extra Totales",
+      "contracts": "Contratos Vigentes",
+      "vacations": "Saldo Vacaciones",
+      "vacations_desc": "Gestiona tus días libres legales",
+      "details": "Ver detalles",
+      "manage": "Gestionar"
+    },
+    "activity": {
+      "title": "⏱️ Última Actividad",
+      "new": "Registrar Nuevo",
+      "empty": "No has registrado horas extra recientemente.",
+      "type": "Turno Extra"
+    },
+    "holidays": {
+      "title": "📅 Próximos Feriados",
+      "loading": "Cargando calendario...",
+      "link": "Ver calendario completo"
+    },
+    "ai_card": {
+      "title": "¿Dudas Legales?",
+      "desc": "Nuestra IA puede analizar tu contrato o responder preguntas laborales.",
+      "btn": "Consultar Ahora"
+    }
+  },
+  "overtime": {
+    "title": "💰 Control de Horas Extra",
+    "subtitle": "Registra tus turnos y calcula tu pago pendiente.",
+    "rate_label": "Valor Hora Ordinaria ($):",
+    "rate_calc_btn": "¿No sabes tu valor? Calcúlalo",
+    "rate_close_btn": "Cerrar calculadora",
+    "popup": {
+      "title": "🔢 Calcular según Sueldo",
+      "salary": "Sueldo Base Mensual",
+      "hours": "Horas Semanales (Contrato)",
+      "btn_apply": "Aplicar Valor Calculado"
+    },
+    "form": {
+      "title": "➕ Nuevo Registro",
+      "date": "Fecha",
+      "hours": "Horas Trabajadas",
+      "notes": "Nota (Opcional)",
+      "btn_save": "Registrar Hora Extra",
+      "btn_saving": "Guardando..."
+    },
+    "summary": {
+      "total_hours": "Horas Extra Totales",
+      "total_pay": "Total a Pagar (Recargo 50%)",
+      "no_rate": "Ingresa tu valor hora"
+    },
+    "history": {
+      "title": "📅 Historial de Turnos",
+      "empty": "No tienes horas registradas aún.",
+      "delete_confirm": "¿Borrar este registro?"
+    }
+  },
+  "vacations": {
+    "calculator_title": "📊 Derecho a Vacaciones",
+    "years_label": "Años de Antigüedad Laboral",
+    "years_note": "* Se requieren 13 años (10 base + 3 empresa) para el primer día progresivo.",
+    "base_days": "Días Base (Anual)",
+    "prog_days": "Días Progresivos",
+    "total_days": "Total por Año",
+    "manual_title": "Opción B: Saldo Total Acumulado",
+    "manual_note": "Si tienes días guardados de años anteriores, escribe el total aquí.",
+    "balance_title": "Saldo Disponible Real",
+    "balance_subtitle": "Días hábiles restantes",
+    "limit_warning": "⚠️ Has excedido tu límite",
+    "limit_legal_title": "⚠️ Límite Legal (Art. 70)",
+    "limit_legal_desc": "La ley prohíbe acumular más de 2 períodos.",
+    "my_breaks": "Mis Descansos",
+    "empty_breaks": "No hay vacaciones agendadas.",
+    "planner_title": "📅 Planificador Inteligente",
+    "btn_save": "Agendar Vacaciones",
+    "btn_no_balance": "Saldo Insuficiente",
+    "info_note": "💡 Nota: El sistema valida automáticamente que no superes tu saldo. Fines de semana y feriados no descuentan.",
+    "alerts": {
+      "select_range": "Selecciona un rango de fechas.",
+      "no_business_days": "El rango no tiene días hábiles.",
+      "limit_exceeded": "⛔ ¡ALERTA! Estás intentando tomar más días de los disponibles.",
+      "success": "✅ Vacaciones agendadas correctamente."
+    }
   },
   "profile": {
-    "fullname": "Nombre Completo",
-    "position": "Cargo",
-    "phone": "Teléfono",
-    "address": "Dirección",
-    "photo": "Foto de Perfil",
-    "edit": "Editar Perfil",
-    "save": "Guardar",
-    "cancel": "Cancelar",
+    "edit_btn": "✏️ Editar Perfil",
+    "save_btn": "Guardar",
+    "cancel_btn": "Cancelar",
     "change_photo": "Cambiar Foto",
-    "image_too_large": "La imagen supera 2MB",
-    "updated_success": "Perfil actualizado correctamente",
-    "update_error": "Error al actualizar perfil",
     "no_position": "Sin cargo definido",
-    "no_contracts": "No tienes contratos registrados."
-  },
-  "contracts": {
-    "new_title": "Nuevo Contrato",
-    "edit_title": "Editar Contrato",
-    "company": "Empresa",
-    "role": "Cargo",
-    "start_date": "Fecha Inicio",
-    "indef": "Indefinido",
-    "fixed": "Plazo Fijo",
-    "honorary": "Honorario",
-    "save": "Guardar Contrato",
-    "update": "Actualizar Contrato",
-    "cancel_edit": "Cancelar Edición",
-    "my_contracts": "Mis Contratos",
-    "error": "Error al guardar contrato"
-  },
-  "pdf": {
-    "title": "Analizador de PDF de Contratos",
-    "description": "Sube tu contrato y la IA detecta cláusulas importantes.",
-    "upload": "Seleccionar PDF",
-    "analyzing": "Analizando...",
-    "error": "Error analizando documento"
+    "loading": "Cargando perfil...",
+    "labels": {
+      "name": "Nombre Completo",
+      "role": "Cargo / Puesto",
+      "phone": "Teléfono",
+      "address": "Dirección"
+    },
+    "contracts": {
+      "title_new": "📝 Registrar Nuevo Contrato",
+      "title_edit": "📝 Editando Contrato",
+      "company": "Empresa",
+      "role": "Cargo",
+      "type": "Tipo",
+      "date": "Fecha Inicio",
+      "btn_save": "Guardar Contrato",
+      "btn_update": "Actualizar",
+      "btn_cancel": "Cancelar edición",
+      "list_title": "Mis Contratos",
+      "empty": "Sin contratos registrados."
+    },
+    "danger_zone": {
+      "title": "Zona de Peligro",
+      "delete_account": "Eliminar Cuenta",
+      "warning": "Una vez que elimines tu cuenta, no hay vuelta atrás. Por favor, asegúrate.",
+      "btn_delete": "Eliminar mi cuenta",
+      "confirm_1": "¿Estás seguro de que quieres eliminar tu cuenta? Esta acción NO se puede deshacer.",
+      "confirm_2": "Se borrarán todos tus contratos, registros de horas y vacaciones permanentemente. ¿Confirmar eliminación?",
+      "success": "Tu cuenta ha sido eliminada."
+    }
   },
   "ai": {
-    "title": "Asistente Legal IA",
-    "subtitle": "Resuelve tus dudas laborales al instante o sube tu contrato para analizar cláusulas clave.",
-    "chat_title": "Chat de Consultas",
-    "chat_placeholder": "Ej: ¿Cuántos días de aviso necesito para renunciar? ¿Es legal trabajar 12 horas seguidas?",
-    "chat_button": "Preguntar",
-    "chat_loading": "Analizando...",
-    "chat_response_title": "Respuesta:",
-    "pdf_title": "Analizador de Contratos",
-    "pdf_subtitle": "Sube tu contrato (PDF) y te resumimos derechos, sueldo y posibles riesgos.",
-    "pdf_placeholder": "Clic para subir PDF",
-    "pdf_loading": "Leyendo documento...",
-    "pdf_result_title": "Análisis del Contrato:",
-    "error_chat": "Lo siento, hubo un error al conectar con la IA. Intenta más tarde.",
-    "error_pdf": "Error al analizar el documento. Asegúrate de que sea un PDF válido."
-  },
-"overtime": {
-    "title": "Registro de Horas Extra",
-    "subtitle": "Registra tus turnos y calcula el pago pendiente",
-    "hourly_rate": "Valor por hora regular ($):",
-    "open_calc": "¿No conoces tu valor por hora? Calcula aquí",
-    "close_calc": "Cerrar calculadora",
-    "calc_from_salary": "Calcular desde el sueldo",
-    "monthly_salary": "Sueldo Base Mensual",
-    "weekly_hours": "Horas Semanales",
-    "hours": "hrs",
-    "apply_rate": "Aplicar Valor Calculado",
-    "new_entry": "Nuevo Registro",
-    "date": "Fecha",
-    "hours_worked": "Horas Trabajadas",
-    "notes": "Notas (Opcional)",
-    "saving": "Guardando...",
-    "register": "Registrar Horas Extra",
-    "total_hours": "Total Horas Extra",
-    "total_pay": "Total a Pagar",
-    "enter_hourly_rate": "Ingresa tu valor por hora",
-    "history": "Historial de Turnos",
-    "no_entries": "Aún no hay horas extra registradas.",
-    "no_notes": "Sin notas",
-    "error_loading": "Error cargando registros",
-    "error_saving": "Error guardando registro",
-    "confirm_delete": "¿Eliminar este registro?",
-    "error_delete": "Error eliminando registro"
-  },
-  "calculator": {
-    "title": "Calculadora de Vacaciones",
-    "years_label": "Años de Antigüedad Laboral",
-    "years_placeholder": "Ingresa tus años trabajados",
-    "calculate": "Calcular",
-    "your_days": "Tus días legales:",
-    "base": "Base",
-    "progressive": "Progresivos",
-    "total": "Total",
-    "days_habiles": "días hábiles",
-    "days": "días"
-  },
-  "vacation_planner": {
-    "title": "Planificador de Vacaciones",
-    "legal_days": "Derecho a Vacaciones",
-    "base_days": "Días Base (Anual)",
-    "progressive_days": "Días Progresivos",
-    "total_year": "Total por Año",
-    "max_accumulation": "Tope Máximo Legal",
-    "warning_accumulation": "La ley prohíbe acumular más de 2 períodos.",
-    "planned_vacations": "Mis Descansos",
-    "no_vacations": "No hay vacaciones agendadas.",
-    "save_selection": "Guardar Selección",
-    "calendar_title": "Calendario Interactivo",
-    "legend_holiday": "Feriado",
-    "legend_selection": "Selección",
-    "legend_vacation": "Tu Vacación"
+    "title": "🤖 Asistente Legal IA",
+    "subtitle": "Tu experto virtual en legislación laboral chilena.",
+    "chat": {
+      "placeholder": "Escribe tu duda legal aquí...",
+      "loading": "Escribiendo...",
+      "error": "Error de conexión.",
+      "disclaimer": "La IA puede cometer errores. Verifica la información importante."
+    },
+    "pdf": {
+      "title": "📄 Analizador de Contratos",
+      "desc": "Sube tu contrato (PDF) y obtén un resumen instantáneo.",
+      "btn_upload": "Clic para subir PDF",
+      "btn_analyzing": "Analizando documento...",
+      "result_title": "🔍 Resultado del Análisis:",
+      "error": "Error al analizar el documento."
+    }
   }
 }
