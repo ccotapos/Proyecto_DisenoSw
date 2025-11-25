@@ -8,7 +8,6 @@
     "logout": "Logout",
     "hello": "Hello"
   },
-
   "home": {
     "welcome_title": "Simplified Labor Management",
     "welcome_subtitle": "Manage your vacations, overtime, and contracts in one place.",
@@ -17,7 +16,7 @@
       "vacation_calc": "Vacation Calculator"
     },
     "cards": {
-      "holidays_title": "Legal Holidays",
+      "holidays_title": "Holidays",
       "holidays_desc": "Updated list of official holidays under Chilean law.",
       "ai_title": "AI Legal Advisor",
       "ai_desc": "Instant answers about contracts and overtime.",
@@ -25,8 +24,7 @@
       "vacations_desc": "Accurate calculation of progressive and legal vacation days."
     }
   },
-
-  "login": {
+ "login": {
     "login_title": "Welcome",
     "login_sub": "Log in to manage your hours",
     "register_title": "Create Account",
@@ -47,38 +45,116 @@
       "credentials": "Incorrect email or password",
       "register": "Registration failed",
       "google": "Google authentication failed"
-    }
+    },
+    "must_login": "You must be logged in to see this page"
+  
   },
-
   "dashboard": {
-    "title": "Labor Dashboard",
-    "year_label": "Check Holidays for Year:",
-    "year_placeholder": "Enter a year",
-    "loading": "Loading holidays or no data available..."
+    "loading": "Loading...",
+    "greeting": "Hello, {{name}} 👋",
+    "subtitle": "Welcome to your labor management dashboard.",
+    "position": "Position: {{position}}",
+    "status": "Status",
+    "active": "🟢 Active",
+    "total_overtime": "Total Overtime",
+    "view_details": "View details",
+    "current_contracts": "Current Contracts",
+    "manage": "Manage",
+    "last_activity": "⏱️ Last Activity",
+    "register_new": "Register New",
+    "no_recent_overtime": "You haven't logged overtime recently.",
+    "overtime_registered": "Overtime Registered",
+    "no_notes": "No notes",
+    "hours": "hrs",
+    "upcoming_holidays": "Upcoming Holidays",
+    "loading_calendar": "Loading calendar...",
+    "view_full_calendar": "View full calendar",
+    "legal_questions": "Legal Questions?",
+    "ai_desc": "Our AI analyzes contracts and answers labor questions.",
+    "consult_now": "Consult Now"
   },
-
   "profile": {
-    "register_title": "Register New Contract",
+    "fullname": "Full Name",
+    "position": "Position",
+    "phone": "Phone",
+    "address": "Address",
+    "photo": "Profile Photo",
+    "edit": "Edit Profile",
+    "save": "Save",
+    "cancel": "Cancel",
+    "change_photo": "Change Photo",
+    "image_too_large": "Image exceeds 2MB",
+    "updated_success": "Profile updated successfully",
+    "update_error": "Error updating profile",
+    "no_position": "No position defined",
+    "no_contracts": "You have no registered contracts."
+  },
+  "contracts": {
+    "new_title": "New Contract",
+    "edit_title": "Edit Contract",
     "company": "Company",
     "role": "Role",
     "start_date": "Start Date",
-    "save_contract": "Save Contract",
-    "contract_types": {
-      "indefinido": "Permanent",
-      "plazo_fijo": "Fixed Term",
-      "honorarios": "Contractor"
-    },
-    "no_contracts": "You have no registered contracts.",
-    "since": "Since",
-
-    "ai_title": "AI Legal Assistant",
-    "ai_desc": "Do you have questions about your contract? Ask me.",
-    "ai_placeholder": "Ask about your labor rights...",
-    "ask_button": "Ask Assistant",
-    "response": "Response",
-    "loading": "Thinking..."
+    "indef": "Permanent",
+    "fixed": "Fixed Term",
+    "honorary": "Contractor",
+    "save": "Save Contract",
+    "update": "Update Contract",
+    "cancel_edit": "Cancel Editing",
+    "my_contracts": "My Contracts",
+    "error": "Error saving contract"
   },
-
+  "pdf": {
+    "title": "Contract PDF Analyzer",
+    "description": "Upload your contract and the AI detects important clauses.",
+    "upload": "Select PDF",
+    "analyzing": "Analyzing...",
+    "error": "Error analyzing document"
+  },
+  "ai": {
+    "title": "AI Legal Assistant",
+    "subtitle": "Get instant answers to labor questions or upload your contract for key clause analysis.",
+    "chat_title": "Consultation Chat",
+    "chat_placeholder": "Ex: How many notice days do I need to resign? Is it legal to work 12 hours straight?",
+    "chat_button": "Ask",
+    "chat_loading": "Analyzing...",
+    "chat_response_title": "Response:",
+    "pdf_title": "Contract Analyzer",
+    "pdf_subtitle": "Upload your contract (PDF) and we'll summarize your rights, salary, and potential pitfalls.",
+    "pdf_placeholder": "Click to upload PDF",
+    "pdf_loading": "Reading document...",
+    "pdf_result_title": "Contract Analysis:",
+    "error_chat": "Sorry, there was an error connecting to the AI. Try again later.",
+    "error_pdf": "Error analyzing the document. Make sure it is a valid PDF."
+  },
+   "overtime": {
+    "title": "Overtime Tracker",
+    "subtitle": "Log your shifts and calculate your pending pay.",
+    "hourly_rate": "Regular Hourly Rate ($):",
+    "open_calc": "Don't know your hourly rate? Calculate it here",
+    "close_calc": "Close calculator",
+    "calc_from_salary": "Calculate from Salary",
+    "monthly_salary": "Monthly Base Salary",
+    "weekly_hours": "Weekly Hours",
+    "hours": "hrs",
+    "apply_rate": "Apply Calculated Rate",
+    "new_entry": "New Entry",
+    "date": "Date",
+    "hours_worked": "Hours Worked",
+    "notes": "Notes (Optional)",
+    "saving": "Saving...",
+    "register": "Register Overtime",
+    "total_hours": "Total Overtime Hours",
+    "total_pay": "Total to Pay",
+    "enter_hourly_rate": "Enter your hourly rate",
+    "history": "Shift History",
+    "no_entries": "No overtime logged yet.",
+    "no_notes": "No notes",
+    "error_loading": "Error loading entries",
+    "error_saving": "Error saving entry",
+    "confirm_delete": "Delete this entry?",
+    "error_delete": "Error deleting entry"
+  },
   "calculator": {
     "title": "Vacation Calculator",
     "years_label": "Years of Work Seniority",
@@ -90,5 +166,49 @@
     "total": "Total",
     "days_habiles": "working days",
     "days": "days"
+  },
+  "overtime_tracker": {
+    "title": "Overtime Tracker",
+    "subtitle": "Log your shifts and calculate your pending pay.",
+    "hourly_rate": "Regular Hourly Rate ($):",
+    "open_calc": "Don't know your hourly rate? Calculate it here",
+    "close_calc": "Close calculator",
+    "calc_from_salary": "Calculate from Salary",
+    "monthly_salary": "Monthly Base Salary",
+    "weekly_hours": "Weekly Hours",
+    "hours": "hrs",
+    "apply_rate": "Apply Calculated Rate",
+    "new_entry": "New Entry",
+    "date": "Date",
+    "hours_worked": "Hours Worked",
+    "notes": "Notes (Optional)",
+    "saving": "Saving...",
+    "register": "Register Overtime",
+    "total_hours": "Total Overtime Hours",
+    "total_pay": "Total to Pay",
+    "enter_hourly_rate": "Enter your hourly rate",
+    "history": "Shift History",
+    "no_entries": "No overtime logged yet.",
+    "no_notes": "No notes",
+    "error_loading": "Error loading entries",
+    "error_saving": "Error saving entry",
+    "confirm_delete": "Delete this entry?",
+    "error_delete": "Error deleting entry"
+  },
+  "vacation_planner": {
+    "title": "Vacation Planner",
+    "legal_days": "Legal Vacation Rights",
+    "base_days": "Base Days (Annually)",
+    "progressive_days": "Progressive Days",
+    "total_year": "Total per Year",
+    "max_accumulation": "Maximum Legal Accumulation",
+    "warning_accumulation": "Law prohibits accumulating more than 2 periods.",
+    "planned_vacations": "My Planned Vacations",
+    "no_vacations": "No vacations scheduled.",
+    "save_selection": "Save Selection",
+    "calendar_title": "Interactive Calendar",
+    "legend_holiday": "Holiday",
+    "legend_selection": "Selection",
+    "legend_vacation": "Your Vacation"
   }
 }

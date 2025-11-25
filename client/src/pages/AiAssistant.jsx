@@ -191,7 +191,7 @@ const AiAssistant = () => {
                 onChange={(e) => setQuestion(e.target.value)}
                 disabled={loading}
               />
-              <button 
+              <button
                 type="submit"
                 disabled={loading || !question.trim()}
                 className="absolute right-2 bg-brand-secondary text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-brand-primary transition disabled:opacity-50"

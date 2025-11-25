@@ -8,13 +8,11 @@ const Dashboard = () => {
   const { user } = useAuth();
   const { t } = useTranslation();
 
-  // --- ESTADOS ---
   const [recentActivity, setRecentActivity] = useState([]);
   const [stats, setStats] = useState({ totalHours: 0, contractCount: 0 });
   const [holidays, setHolidays] = useState([]);
   const [loadingHolidays, setLoadingHolidays] = useState(true);
 
-  // --- EFECTOS ---
   useEffect(() => {
     if (user) {
       fetchUserData();
@@ -22,7 +20,6 @@ const Dashboard = () => {
     }
   }, [user]);
 
-  // 1. RESUMEN: Horas Extra + Contratos
   const fetchUserData = async () => {
     try {
       const [laborRes, contractsRes] = await Promise.all([
@@ -35,7 +32,7 @@ const Dashboard = () => {
 
       const totalHours = entries.reduce((sum, item) => sum + item.hoursWorked, 0);
 
-      setRecentActivity(entries.slice(0, 3)); // últimas 3 actividades
+      setRecentActivity(entries.slice(0, 3));
 
       setStats({
         totalHours,
@@ -43,11 +40,10 @@ const Dashboard = () => {
       });
 
     } catch (error) {
-      console.error("Error cargando resumen del usuario");
+      console.error("Error loading user summary");
     }
   };
 
-  // 2. Feriados (respaldo si API falla)
   const fetchHolidays = async () => {
     setLoadingHolidays(true);
     const currentYear = new Date().getFullYear();
@@ -69,7 +65,7 @@ const Dashboard = () => {
       setHolidays(upcoming.length > 0 ? upcoming : allHolidays.slice(0, 4));
 
     } catch (error) {
-      console.warn("API falló, usando respaldo local");
+      console.warn("API failed, using local backup");
       setHolidays([
         { date: "2025-01-01", title: "Año Nuevo", extra: "Irrenunciable" },
         { date: "2025-04-18", title: "Viernes Santo", extra: "Religioso" },
@@ -81,7 +77,7 @@ const Dashboard = () => {
     }
   };
 
-  if (!user) return <div className="p-10 text-center">Cargando...</div>;
+  if (!user) return <div className="p-10 text-center">{t('dashboard.loading')}</div>;
 
   return (
     <div className="max-w-6xl mx-auto py-8 px-4">
@@ -90,55 +86,55 @@ const Dashboard = () => {
       <div className="bg-gradient-to-r from-brand-primary to-brand-secondary text-white p-8 rounded-2xl shadow-lg mb-8 flex flex-col md:flex-row items-center justify-between">
         <div>
           <h1 className="text-3xl font-extrabold mb-2">
-            {t('navbar.hello')}, {user.name.split(' ')[0]} 👋
+            {t('dashboard.greeting', { name: user.name.split(' ')[0] })}
           </h1>
           <p className="opacity-90 text-sm md:text-base">
-            {user.position ? `Cargo: ${user.position}` : "Bienvenido a tu panel de gestión laboral."}
+            {user.position ? t('dashboard.position', { position: user.position }) : t('dashboard.subtitle')}
           </p>
         </div>
 
         <div className="mt-4 md:mt-0 bg-white bg-opacity-20 p-3 rounded-lg backdrop-blur-sm text-center">
-          <p className="text-xs uppercase font-bold tracking-wider">Estado</p>
-          <p className="font-bold text-lg">🟢 Activo</p>
+          <p className="text-xs uppercase font-bold tracking-wider">{t('dashboard.status')}</p>
+          <p className="font-bold text-lg">{t('dashboard.active')}</p>
         </div>
       </div>
 
       <div className="grid md:grid-cols-3 gap-8">
 
-        {/* COLUMNA IZQUIERDA */}
+        {/* LEFT COLUMN */}
         <div className="md:col-span-2 space-y-8">
 
-          {/* TARJETAS RESUMEN */}
+          {/* SUMMARY CARDS */}
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-white p-6 rounded-2xl shadow-md border-l-4 border-brand-accent">
-              <p className="text-gray-500 text-xs font-bold uppercase mb-1">Horas Extra Totales</p>
+              <p className="text-gray-500 text-xs font-bold uppercase mb-1">{t('dashboard.total_overtime')}</p>
               <p className="text-4xl font-extrabold text-brand-dark">{stats.totalHours}</p>
               <Link to="/calculator" className="text-xs text-brand-primary hover:underline mt-2 block">
-                Ver detalles →
+                {t('dashboard.view_details')} →
               </Link>
             </div>
 
             <div className="bg-white p-6 rounded-2xl shadow-md border-l-4 border-purple-500">
-              <p className="text-gray-500 text-xs font-bold uppercase mb-1">Contratos Vigentes</p>
+              <p className="text-gray-500 text-xs font-bold uppercase mb-1">{t('dashboard.current_contracts')}</p>
               <p className="text-4xl font-extrabold text-brand-dark">{stats.contractCount}</p>
               <Link to="/profile" className="text-xs text-brand-primary hover:underline mt-2 block">
-                Gestionar →
+                {t('dashboard.manage')} →
               </Link>
             </div>
           </div>
 
-          {/* ACTIVIDAD RECIENTE */}
+          {/* RECENT ACTIVITY */}
           <div className="bg-white rounded-2xl shadow-md overflow-hidden">
             <div className="p-6 border-b flex justify-between items-center">
-              <h3 className="font-bold text-brand-dark text-lg">⏱️ Última Actividad</h3>
+              <h3 className="font-bold text-brand-dark text-lg">{t('dashboard.last_activity')}</h3>
               <Link to="/calculator" className="text-sm text-brand-secondary font-bold hover:underline">
-                Registrar Nuevo
+                {t('dashboard.register_new')}
               </Link>
             </div>
 
             {recentActivity.length === 0 ? (
               <div className="p-8 text-center text-gray-400 text-sm">
-                No has registrado horas extra recientemente.
+                {t('dashboard.no_recent_overtime')}
               </div>
             ) : (
               <div className="divide-y">
@@ -149,13 +145,13 @@ const Dashboard = () => {
                         {new Date(item.date).getDate()}
                       </div>
                       <div>
-                        <p className="font-bold text-sm text-gray-800">Turno Extra Registrado</p>
+                        <p className="font-bold text-sm text-gray-800">{t('dashboard.overtime_registered')}</p>
                         <p className="text-xs text-gray-500">
-                          {new Date(item.date).toLocaleDateString()} • {item.notes || "Sin nota"}
+                          {new Date(item.date).toLocaleDateString()} • {item.notes || t('dashboard.no_notes')}
                         </p>
                       </div>
                     </div>
-                    <span className="font-bold text-brand-primary">+{item.hoursWorked} hrs</span>
+                    <span className="font-bold text-brand-primary">+{item.hoursWorked} {t('dashboard.hours')}</span>
                   </div>
                 ))}
               </div>
@@ -163,20 +159,20 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* COLUMNA DERECHA */}
+        {/* RIGHT COLUMN */}
         <div className="space-y-8">
 
-          {/* FERIADOS */}
+          {/* HOLIDAYS */}
           <div className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100">
             <div className="bg-red-50 p-4 border-b border-red-100">
               <h3 className="font-bold text-red-700 flex items-center gap-2">
-                📅 Próximos Feriados
+                📅 {t('dashboard.upcoming_holidays')}
               </h3>
             </div>
 
             {loadingHolidays ? (
               <div className="p-6 text-center text-gray-400 text-sm animate-pulse">
-                Cargando calendario...
+                {t('dashboard.loading_calendar')}
               </div>
             ) : (
               <div className="divide-y">
@@ -196,18 +192,21 @@ const Dashboard = () => {
 
             <div className="p-3 bg-gray-50 text-center">
               <a href="https://www.feriados.cl/" target="_blank" rel="noopener noreferrer" className="text-xs text-gray-500 hover:text-red-500">
-                Ver calendario completo →
+                {t('dashboard.view_full_calendar')} →
               </a>
             </div>
           </div>
 
-          {/* ACCESO IA */}
+          {/* AI ACCESS */}
           <div className="bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group">
             <div className="relative z-10">
-              <h3 className="font-bold text-lg mb-2">¿Dudas Legales?</h3>
-              <p className="text-sm opacity-90 mb-4">Nuestra IA puede analizar tu contrato o responder preguntas laborales.</p>
-              <Link to="/ai-assistant" className="inline-block bg-white text-purple-700 px-4 py-2 rounded-lg font-bold text-sm hover:bg-opacity-90 transition shadow">
-                Consultar Ahora
+              <h3 className="font-bold text-lg mb-2">{t('dashboard.legal_questions')}</h3>
+              <p className="text-sm opacity-90 mb-4">{t('dashboard.ai_desc')}</p>
+              <Link
+                to="/ai-assistant"
+                className="inline-block bg-white text-purple-700 px-4 py-2 rounded-lg font-bold text-sm hover:bg-opacity-90 transition shadow"
+              >
+                {t('dashboard.consult_now')}
               </Link>
             </div>
 
@@ -218,7 +217,6 @@ const Dashboard = () => {
 
         </div>
       </div>
-
     </div>
   );
 };

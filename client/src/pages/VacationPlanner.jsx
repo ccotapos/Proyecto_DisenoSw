@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 const VacationPlanner = () => {
   const { t } = useTranslation();
 
-  // --- ESTADOS ---
   const [yearsWorked, setYearsWorked] = useState(0);
   
   // Estado maestro: Este es el número que manda (puede ser calculado o manual)
@@ -27,7 +26,6 @@ const VacationPlanner = () => {
   // Saldo Real = Lo que el usuario dice que tiene - Lo que ha agendado
   const daysRemaining = totalAvailable - daysUsed;
 
-  // --- EFECTOS ---
   useEffect(() => {
     fetchHolidays();
     fetchPlannedVacations();
@@ -39,7 +37,7 @@ const VacationPlanner = () => {
   const calculateLegal = (val) => {
     const y = parseInt(val) || 0;
     setYearsWorked(y);
-    
+
     const base = 15;
     let progressive = 0;
 
@@ -65,7 +63,7 @@ const VacationPlanner = () => {
       setHolidays(data.data.map(h => ({ date: h.date, title: h.title })));
     } catch (err) {
       setHolidays([
-        { date: "2025-01-01", title: "Año Nuevo" },
+        { date: "2025-01-01", title: t('home.cards.holidays_title') },
         { date: "2025-04-18", title: "Viernes Santo" },
         { date: "2025-05-01", title: "Día del Trabajador" },
         { date: "2025-05-21", title: "Glorias Navales" },
@@ -79,7 +77,9 @@ const VacationPlanner = () => {
     try {
       const res = await api.get('/vacations');
       setPlannedVacations(res.data);
-    } catch (error) { console.error("Error cargando vacaciones"); }
+    } catch {
+      console.error("Error cargando vacaciones");
+    }
   };
 
   // 3. Contar Días Hábiles
@@ -87,7 +87,6 @@ const VacationPlanner = () => {
     let count = 0;
     let curDate = new Date(start);
     const endDate = new Date(end);
-    
     while (curDate <= endDate) {
       const dayOfWeek = curDate.getDay();
       const dateString = curDate.toISOString().split('T')[0];
@@ -107,7 +106,7 @@ const VacationPlanner = () => {
       alert("Selecciona un rango de fechas en el calendario.");
       return;
     }
-    
+
     const [start, end] = dateRange;
     const businessDays = countBusinessDays(start, end);
 
@@ -136,11 +135,13 @@ const VacationPlanner = () => {
   };
 
   const handleDelete = async (id) => {
-    if(!window.confirm("¿Borrar esta solicitud?")) return;
+    if (!window.confirm("¿Borrar esta solicitud?")) return;
     try {
       await api.delete(`/vacations/${id}`);
       setPlannedVacations(plannedVacations.filter(v => v._id !== id));
-    } catch (error) { alert("Error borrando"); }
+    } catch {
+      alert(t('overtime.error_delete'));
+    }
   };
 
   const getTileContent = ({ date, view }) => {
@@ -215,13 +216,12 @@ const VacationPlanner = () => {
           )}
         </div>
 
-        {/* Lista de Vacaciones */}
         <div className="bg-white p-6 rounded-2xl shadow-md">
           <h3 className="font-bold text-brand-dark mb-4 flex justify-between">
             Mis Descansos <span className="text-red-500 text-sm">(-{daysUsed})</span>
           </h3>
           {plannedVacations.length === 0 ? (
-            <p className="text-sm text-gray-400">No hay vacaciones agendadas.</p>
+            <p className="text-sm text-gray-400">{t('overtime.no_entries')}</p>
           ) : (
             <ul className="space-y-3 max-h-60 overflow-y-auto">
               {plannedVacations.map(v => (
@@ -245,7 +245,7 @@ const VacationPlanner = () => {
         </div>
       </div>
 
-      {/* COLUMNA DERECHA: Calendario */}
+      {/* Columna derecha: Calendario */}
       <div className="md:col-span-2">
         <div className="bg-white p-6 rounded-2xl shadow-lg h-full flex flex-col">
           <div className="flex justify-between items-center mb-6">
@@ -274,7 +274,6 @@ const VacationPlanner = () => {
           </div>
         </div>
       </div>
-
     </div>
   );
 };
