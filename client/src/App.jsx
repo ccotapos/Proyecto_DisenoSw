@@ -17,6 +17,7 @@ function App() {
       <BrowserRouter>
         <Layout>
           <Routes>
+            {/* Rutas PÃºblicas (Cualquiera puede entrar) */}
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
 
