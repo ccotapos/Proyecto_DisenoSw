@@ -19,7 +19,7 @@
       "holidays": "Legal Holidays",
       "holidays_desc": "Updated consultation of days off according to law.",
       "ai": "AI Advisory",
-      "ai_desc": "Solve doubts about contracts and overtime instantly.",
+      "ai_desc": "Get instant answers to your work-related questions and overtime issues.",
       "overtime": "Overtime Tracker",
       "overtime_desc": "Keep a record of extra shifts and calculate earnings."
     }
@@ -53,13 +53,13 @@
       "manage": "Manage"
     },
     "activity": {
-      "title": "⏱️ Recent Activity",
+      "title": " Recent Activity",
       "new": "Register New",
       "empty": "No overtime recorded recently.",
       "type": "Extra Shift"
     },
     "holidays": {
-      "title": "📅 Upcoming Holidays",
+      "title": " Upcoming Holidays",
       "loading": "Loading calendar...",
       "link": "View full calendar"
     },
@@ -70,19 +70,19 @@
     }
   },
   "overtime": {
-    "title": "💰 Overtime Tracker",
+    "title": "Overtime Tracker",
     "subtitle": "Log your shifts and calculate pending pay.",
     "rate_label": "Hourly Rate ($):",
     "rate_calc_btn": "Don't know your rate? Calculate",
     "rate_close_btn": "Close calculator",
     "popup": {
-      "title": "🔢 Calculate by Salary",
+      "title": "Calculate by Salary",
       "salary": "Monthly Base Salary",
       "hours": "Weekly Hours (Contract)",
       "btn_apply": "Apply Calculated Rate"
     },
     "form": {
-      "title": "➕ New Entry",
+      "title": " New Entry",
       "date": "Date",
       "hours": "Hours Worked",
       "notes": "Note (Optional)",
@@ -95,13 +95,13 @@
       "no_rate": "Enter hourly rate"
     },
     "history": {
-      "title": "📅 Shift History",
+      "title": "Shift History",
       "empty": "No hours recorded yet.",
       "delete_confirm": "Delete this entry?"
     }
   },
   "vacations": {
-    "calculator_title": "📊 Vacation Rights",
+    "calculator_title": "Vacation Rights",
     "years_label": "Years of Service",
     "years_note": "* 13 years (10 base + 3 company) required for first progressive day.",
     "base_days": "Base Days (Yearly)",
@@ -111,12 +111,12 @@
     "manual_note": "If you have saved days from previous years, enter total here.",
     "balance_title": "Real Available Balance",
     "balance_subtitle": "Business days remaining",
-    "limit_warning": "⚠️ Limit Exceeded",
-    "limit_legal_title": "⚠️ Legal Limit (Art. 70)",
+    "limit_warning": " Limit Exceeded",
+    "limit_legal_title": "Legal Limit (Art. 70)",
     "limit_legal_desc": "Law prohibits accumulating more than 2 periods.",
     "my_breaks": "My Breaks",
     "empty_breaks": "No vacations scheduled.",
-    "planner_title": "📅 Smart Planner",
+    "planner_title": "Smart Planner",
     "btn_save": "Schedule Vacation",
     "btn_no_balance": "Insufficient Balance",
     "info_note": "💡 Note: System automatically validates balance. Weekends and holidays are not deducted.",
@@ -124,11 +124,11 @@
       "select_range": "Select a date range.",
       "no_business_days": "Range has no business days.",
       "limit_exceeded": "⛔ ALERT! You are trying to take more days than available.",
-      "success": "✅ Vacation scheduled successfully."
+      "success": "Vacation scheduled successfully."
     }
   },
   "profile": {
-    "edit_btn": "✏️ Edit Profile",
+    "edit_btn": "Edit Profile",
     "save_btn": "Save",
     "cancel_btn": "Cancel",
     "change_photo": "Change Photo",
@@ -140,8 +140,8 @@
       "address": "Address"
     },
     "contracts": {
-      "title_new": "📝 Register New Contract",
-      "title_edit": "📝 Editing Contract",
+      "title_new": "Register New Contract",
+      "title_edit": "Editing Contract",
       "company": "Company",
       "role": "Role",
       "type": "Type",
@@ -165,19 +165,20 @@
   "ai": {
     "title": "🤖 Legal AI Assistant",
     "subtitle": "Your virtual expert in Chilean labor law.",
-    "chat": {
-      "placeholder": "Type your legal doubt here...",
-      "loading": "Typing...",
-      "error": "Connection error.",
-      "disclaimer": "AI may make mistakes. Verify important info."
+    "sidebar": {
+      "new_chat": "New Chat",
+      "no_history": "No history"
     },
-    "pdf": {
-      "title": "📄 Contract Analyzer",
-      "desc": "Upload your contract (PDF) and get an instant summary.",
-      "btn_upload": "Click to upload PDF",
-      "btn_analyzing": "Analyzing document...",
-      "result_title": "🔍 Analysis Result:",
-      "error": "Error analyzing document."
+    "chat": {
+      "title": "💬 Consultation Chat",
+      "placeholder": "Type your legal doubt here...",
+      "btn_ask": "Ask",
+      "loading": "Typing...",
+      "response_title": "Response:",
+      "error": "Connection error. Please try again.",
+      "welcome_msg": "Hello 👋. I am your virtual legal assistant. How can I help you today?",
+      "empty_state": "🤖 How can I help you with legal matters today?",
+      "disclaimer": "AI may make mistakes. Verify important info."
     }
   }
 }

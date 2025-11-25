@@ -6,7 +6,6 @@ export default {
   ],
   theme: {
     extend: {
-      // Aquí definimos tus colores personalizados
       colors: {
         'brand-dark': '#664C43',      // Marrón oscuro (Texto principal, Footer)
         'brand-primary': '#873D48',   // Marrón rojizo (Navbar, Títulos destacados)

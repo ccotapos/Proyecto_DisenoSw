@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 const VacationPlanner = () => {
   const { t } = useTranslation();
 
-  // --- ESTADOS ---
+
   const [yearsWorked, setYearsWorked] = useState(0);
   const [totalAvailable, setTotalAvailable] = useState(15); 
   const [legalInfo, setLegalInfo] = useState({ base: 15, progressive: 0 });
@@ -23,7 +23,7 @@ const VacationPlanner = () => {
     fetchPlannedVacations();
   }, []);
 
-  // --- LÓGICA ---
+ 
   const calculateLegal = (val) => {
     const y = parseInt(val) || 0;
     setYearsWorked(y);
@@ -191,7 +191,6 @@ const VacationPlanner = () => {
             {t('vacations.my_breaks')} <span className="text-red-500 text-sm">(-{daysUsed})</span>
           </h3>
           {plannedVacations.length === 0 ? (
-            // AQUÍ ESTABA EL ERROR DEL OVERTIME.NO_ENTRIES
             <p className="text-sm text-gray-400">{t('vacations.empty_breaks')}</p>
           ) : (
             <ul className="space-y-3 max-h-60 overflow-y-auto">

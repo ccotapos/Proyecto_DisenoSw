@@ -1,15 +1,12 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
-// Asegúrate de que la ruta al modelo sea correcta (mayúscula/minúscula)
 const Chat = require('../models/chat'); 
 
-// ---- FUNCIÓN MAESTRA (Con tus versiones 2.0) ---- //
+
 async function generateWithFallback(prompt, questionForChat = null) {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error("❌ Falta GEMINI_API_KEY en el archivo .env");
 
   const genAI = new GoogleGenerativeAI(apiKey);
-
-  // TUS MODELOS SOLICITADOS (No los he cambiado)
   const modelsToTry = [
     "gemini-2.0-flash",
     "gemini-2.0-pro",
@@ -44,7 +41,7 @@ async function generateWithFallback(prompt, questionForChat = null) {
   throw new Error(`Todos los modelos fallaron. Último error: ${lastError.message}`);
 }
 
-// 1. OBTENER LISTA DE CHATS
+
 exports.getUserChats = async (req, res) => {
   try {
     const chats = await Chat.find({ userId: req.user.id })
@@ -56,7 +53,6 @@ exports.getUserChats = async (req, res) => {
   }
 };
 
-// 2. OBTENER UN CHAT ESPECÍFICO
 exports.getChatById = async (req, res) => {
   try {
     const chat = await Chat.findOne({ _id: req.params.id, userId: req.user.id });
@@ -67,19 +63,15 @@ exports.getChatById = async (req, res) => {
   }
 };
 
-// 3. ENVIAR MENSAJE (CORREGIDO)
 exports.sendMessage = async (req, res) => {
   const { question, chatId } = req.body; 
 
   try {
-    // CORRECCIÓN: Llamamos a la función maestra en lugar de redefinir genAI aquí.
-    // Esto asegura que se usen tus modelos 2.0 y el fallback.
     const aiAnswer = await generateWithFallback(null, question);
 
     let chat;
 
     if (chatId) {
-      // Si ya existe el chat, agregamos los mensajes
       chat = await Chat.findOne({ _id: chatId, userId: req.user.id });
       if (chat) {
         chat.messages.push({ role: 'user', content: question });
@@ -88,8 +80,6 @@ exports.sendMessage = async (req, res) => {
         await chat.save();
       }
     } else {
-      // Si es nuevo, creamos el documento
-      // Título automático: primeras 5 palabras
       const title = question.split(' ').slice(0, 5).join(' ') + "...";
       
       chat = new Chat({
@@ -111,7 +101,6 @@ exports.sendMessage = async (req, res) => {
   }
 };
 
-// 4. ELIMINAR CHAT
 exports.deleteChat = async (req, res) => {
   try {
     await Chat.findOneAndDelete({ _id: req.params.id, userId: req.user.id });

@@ -11,7 +11,7 @@
     "hello": "Hola"
   },
  "home": {
-    "welcome_title": "Gestión Laboral Simplificada",
+    "welcome_title": "Gestor Laboral Simplificado",
     "welcome_subtitle": "Controla tus vacaciones, horas extra y contratos en un solo lugar.",
     "login_btn": "Comenzar Ahora",
     "vacation_calc": "Registrar Horas Extra",
@@ -19,7 +19,7 @@
       "holidays": "Feriados Legales",
       "holidays_desc": "Consulta actualizada de días libres según la ley chilena.",
       "ai": "Asesoría IA",
-      "ai_desc": "Resuelve dudas sobre contratos y horas extra al instante.",
+      "ai_desc": "Resuelve dudas laborales y horas extra al instante.",
       "overtime": "Control de Horas Extra", 
       "overtime_desc": "Lleva un registro de tus turnos extra y calcula cuánto debes cobrar."
     }
@@ -53,13 +53,13 @@
       "manage": "Gestionar"
     },
     "activity": {
-      "title": "⏱️ Última Actividad",
+      "title": "Última Actividad",
       "new": "Registrar Nuevo",
       "empty": "No has registrado horas extra recientemente.",
       "type": "Turno Extra"
     },
     "holidays": {
-      "title": "📅 Próximos Feriados",
+      "title": "Próximos Feriados",
       "loading": "Cargando calendario...",
       "link": "Ver calendario completo"
     },
@@ -70,7 +70,7 @@
     }
   },
   "overtime": {
-    "title": "💰 Control de Horas Extra",
+    "title": "Control de Horas Extra",
     "subtitle": "Registra tus turnos y calcula tu pago pendiente.",
     "rate_label": "Valor Hora Ordinaria ($):",
     "rate_calc_btn": "¿No sabes tu valor? Calcúlalo",
@@ -82,7 +82,7 @@
       "btn_apply": "Aplicar Valor Calculado"
     },
     "form": {
-      "title": "➕ Nuevo Registro",
+      "title": "Nuevo Registro",
       "date": "Fecha",
       "hours": "Horas Trabajadas",
       "notes": "Nota (Opcional)",
@@ -95,13 +95,13 @@
       "no_rate": "Ingresa tu valor hora"
     },
     "history": {
-      "title": "📅 Historial de Turnos",
+      "title": "Historial de Turnos",
       "empty": "No tienes horas registradas aún.",
       "delete_confirm": "¿Borrar este registro?"
     }
   },
   "vacations": {
-    "calculator_title": "📊 Derecho a Vacaciones",
+    "calculator_title": "Derecho a Vacaciones",
     "years_label": "Años de Antigüedad Laboral",
     "years_note": "* Se requieren 13 años (10 base + 3 empresa) para el primer día progresivo.",
     "base_days": "Días Base (Anual)",
@@ -112,11 +112,11 @@
     "balance_title": "Saldo Disponible Real",
     "balance_subtitle": "Días hábiles restantes",
     "limit_warning": "⚠️ Has excedido tu límite",
-    "limit_legal_title": "⚠️ Límite Legal (Art. 70)",
+    "limit_legal_title": "Límite Legal (Art. 70)",
     "limit_legal_desc": "La ley prohíbe acumular más de 2 períodos.",
     "my_breaks": "Mis Descansos",
     "empty_breaks": "No hay vacaciones agendadas.",
-    "planner_title": "📅 Planificador Inteligente",
+    "planner_title": "Planificador Inteligente",
     "btn_save": "Agendar Vacaciones",
     "btn_no_balance": "Saldo Insuficiente",
     "info_note": "💡 Nota: El sistema valida automáticamente que no superes tu saldo. Fines de semana y feriados no descuentan.",
@@ -162,23 +162,24 @@
       "confirm_2": "Se borrarán todos tus contratos, registros de horas y vacaciones permanentemente. ¿Confirmar eliminación?",
       "success": "Tu cuenta ha sido eliminada."
     }
-  },
+},
   "ai": {
     "title": "🤖 Asistente Legal IA",
     "subtitle": "Tu experto virtual en legislación laboral chilena.",
-    "chat": {
-      "placeholder": "Escribe tu duda legal aquí...",
-      "loading": "Escribiendo...",
-      "error": "Error de conexión.",
-      "disclaimer": "La IA puede cometer errores. Verifica la información importante."
+    "sidebar": {
+      "new_chat": "Nuevo Chat",
+      "no_history": "Sin historial"
     },
-    "pdf": {
-      "title": "📄 Analizador de Contratos",
-      "desc": "Sube tu contrato (PDF) y obtén un resumen instantáneo.",
-      "btn_upload": "Clic para subir PDF",
-      "btn_analyzing": "Analizando documento...",
-      "result_title": "🔍 Resultado del Análisis:",
-      "error": "Error al analizar el documento."
+    "chat": {
+      "title": "💬 Chat de Consultas",
+      "placeholder": "Escribe tu duda legal aquí...",
+      "btn_ask": "Preguntar",
+      "loading": "Escribiendo...",
+      "response_title": "Respuesta:",
+      "error": "Error de conexión. Intenta nuevamente.",
+      "welcome_msg": "Hola 👋. Soy tu asistente legal virtual. ¿En qué puedo ayudarte hoy?",
+      "empty_state": "🤖 ¿En qué duda legal puedo ayudarte hoy?",
+      "disclaimer": "La IA puede cometer errores. Verifica la información importante."
     }
   }
 }

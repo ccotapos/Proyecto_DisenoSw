@@ -3,28 +3,24 @@ import api from '../services/api';
 import { useTranslation } from 'react-i18next';
 
 const AiAssistant = () => {
-  const { t } = useTranslation();
-
-  // --- ESTADOS ---
-  const [chatList, setChatList] = useState([]); // Lista lateral
-  const [currentChatId, setCurrentChatId] = useState(null); // ID chat actual
-  const [messages, setMessages] = useState([]); // Mensajes visibles
+  const { t } = useTranslation(); 
+  const [chatList, setChatList] = useState([]); 
+  const [currentChatId, setCurrentChatId] = useState(null); 
+  const [messages, setMessages] = useState([]); 
   const [question, setQuestion] = useState('');
   const [loading, setLoading] = useState(false);
 
   const chatEndRef = useRef(null);
 
-  // --- CARGA INICIAL ---
   useEffect(() => {
     loadHistory();
   }, []);
 
-  // Auto-scroll al fondo
+
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // 1. Cargar lista de conversaciones
   const loadHistory = async () => {
     try {
       const res = await api.get('/ai/history');
@@ -34,7 +30,6 @@ const AiAssistant = () => {
     }
   };
 
-  // 2. Cargar una conversación específica
   const selectChat = async (id) => {
     try {
       setLoading(true);
@@ -48,18 +43,15 @@ const AiAssistant = () => {
     }
   };
 
-  // 3. Empezar chat nuevo
   const startNewChat = () => {
     setCurrentChatId(null);
     setMessages([]);
   };
 
-  // 4. Enviar mensaje
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!question.trim()) return;
 
-    // Optimismo: Agregar mensaje del usuario inmediatamente
     const newMsgUser = { role: 'user', content: question };
     setMessages(prev => [...prev, newMsgUser]);
     const inputQuestion = question;
@@ -67,7 +59,6 @@ const AiAssistant = () => {
     setLoading(true);
 
     try {
-      // Enviar al backend (si hay ID, sigue el hilo. Si no, crea uno)
       const res = await api.post('/ai/send', { 
         question: inputQuestion, 
         chatId: currentChatId 
@@ -76,23 +67,21 @@ const AiAssistant = () => {
       const newMsgAi = { role: 'ai', content: res.data.answer };
       setMessages(prev => [...prev, newMsgAi]);
 
-      // Si era un chat nuevo, actualizamos el ID y la lista lateral
       if (!currentChatId) {
         setCurrentChatId(res.data.chatId);
-        loadHistory(); // Recargar lista para ver el nuevo título
+        loadHistory(); // Recargar lista lateral para ver el nuevo título
       }
 
     } catch (error) {
-      setMessages(prev => [...prev, { role: 'ai', content: "⚠️ Error de conexión. Intenta de nuevo." }]);
+      setMessages(prev => [...prev, { role: 'ai', content: t('ai.chat.error') }]);
     } finally {
       setLoading(false);
     }
   };
 
-  // 5. Borrar Chat
   const handleDeleteChat = async (e, id) => {
-    e.stopPropagation(); // Evitar que se seleccione al borrar
-    if (!window.confirm("¿Borrar esta conversación?")) return;
+    e.stopPropagation(); 
+    if (!window.confirm("Delete?")) return; 
     try {
       await api.delete(`/ai/history/${id}`);
       setChatList(prev => prev.filter(c => c._id !== id));
@@ -103,30 +92,42 @@ const AiAssistant = () => {
   return (
     <div className="max-w-6xl mx-auto py-6 px-4 h-[85vh] flex flex-col">
       
+      {/* Título Principal Traducido */}
+      <h1 className="text-3xl font-extrabold text-brand-primary mb-2 text-center">
+        {t('ai.title')}
+      </h1>
+      <p className="text-center text-gray-500 mb-6">
+        {t('ai.subtitle')}
+      </p>
+
       <div className="flex-1 flex overflow-hidden bg-white rounded-2xl shadow-xl border border-gray-200">
         
         {/* --- SIDEBAR (HISTORIAL) --- */}
-        <div className="w-1/3bg-gray-50 border-r border-gray-200 flex flex-col w-64 hidden md:flex">
+        <div className="bg-gray-50 border-r border-gray-200 flex flex-col w-64 hidden md:flex">
           {/* Botón Nuevo Chat */}
           <div className="p-4">
             <button 
               onClick={startNewChat}
               className="w-full bg-brand-primary text-white py-3 rounded-xl font-bold shadow hover:bg-brand-dark transition flex items-center justify-center gap-2"
             >
-              <span>+</span> Nuevo Chat
+              {/* Traducción Botón */}
+              <span>+</span> {t('ai.sidebar.new_chat')}
             </button>
           </div>
 
           {/* Lista Scrollable */}
           <div className="flex-1 overflow-y-auto px-2 space-y-2 custom-scrollbar">
-            {chatList.length === 0 && <p className="text-center text-xs text-gray-400 mt-4">Sin historial</p>}
+            {chatList.length === 0 && (
+              // Traducción "Sin Historial"
+              <p className="text-center text-xs text-gray-400 mt-4">{t('ai.sidebar.no_history')}</p>
+            )}
             
             {chatList.map(chat => (
               <div 
                 key={chat._id}
                 onClick={() => selectChat(chat._id)}
                 className={`p-3 rounded-lg cursor-pointer text-sm flex justify-between items-center group transition ${
-                  currentChatId === chat._id ? 'bg-white shadow border-l-4 border-brand-secondary' : 'hover:bg-gray-100 text-gray-600'
+                  currentChatId === chat._id ? 'bg-white shadow border-l-4 border-brand-secondary' : 'hover:bg-gray-200 text-gray-600'
                 }`}
               >
                 <span className="truncate flex-1 font-medium">{chat.title}</span>
@@ -144,18 +145,18 @@ const AiAssistant = () => {
         {/* --- AREA PRINCIPAL (CHAT) --- */}
         <div className="flex-1 flex flex-col bg-white relative">
           
-          {/* Header Móvil (Solo visible en celular para volver al historial o nuevo chat) */}
+          {/* Header Móvil */}
           <div className="md:hidden p-2 border-b flex justify-between">
-             <button onClick={startNewChat} className="text-xs bg-gray-200 px-2 py-1 rounded">Nuevo Chat</button>
-             {/* Aquí podrías poner un botón para abrir un menú lateral en móvil */}
+             <button onClick={startNewChat} className="text-xs bg-gray-200 px-2 py-1 rounded">{t('ai.sidebar.new_chat')}</button>
           </div>
 
           {/* Mensajes */}
           <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-white">
             {messages.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-gray-400 opacity-50">
-                <span className="text-6xl mb-4">🤖</span>
-                <p className="text-lg font-medium">¿En qué duda legal puedo ayudarte hoy?</p>
+                <span className="text-6xl mb-4"></span>
+                {/* Traducción Estado Vacío */}
+                <p className="text-lg font-medium">{t('ai.chat.empty_state')}</p>
               </div>
             ) : (
               messages.map((msg, idx) => (
@@ -172,8 +173,9 @@ const AiAssistant = () => {
             )}
             {loading && (
               <div className="flex justify-start">
+                {/* Traducción Cargando */}
                 <div className="bg-gray-100 px-4 py-2 rounded-full text-xs animate-pulse text-gray-500">
-                  Escribiendo respuesta...
+                  {t('ai.chat.loading')}
                 </div>
               </div>
             )}
@@ -186,7 +188,8 @@ const AiAssistant = () => {
               <input
                 type="text"
                 className="w-full border border-gray-300 rounded-full py-3 pl-5 pr-12 focus:ring-2 focus:ring-brand-secondary outline-none shadow-sm transition"
-                placeholder="Escribe tu pregunta..."
+                // Traducción Placeholder
+                placeholder={t('ai.chat.placeholder')}
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
                 disabled={loading}
@@ -199,8 +202,9 @@ const AiAssistant = () => {
                 ➤
               </button>
             </form>
+            {/* Traducción Disclaimer */}
             <p className="text-center text-[10px] text-gray-400 mt-2">
-              La IA puede cometer errores. Verifica la información importante.
+              {t('ai.chat.disclaimer')}
             </p>
           </div>
 

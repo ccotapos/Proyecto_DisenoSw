@@ -1,17 +1,29 @@
-# Proyecto_DisenoSw
-Repositorio Proyecto diseño de Software
+# Proyecto Diseño de Software (GestoLaboral)
+
+Repositorio del Proyecto de Diseño de Software. Esta es una aplicación web diseñada para trabajadores o PyMEs que permite gestionar información laboral básica de manera eficiente.
+
+## Acceso directo Front End
+Puedes acceder a la aplicación desplegada aquí:
+🔗 **[https://proyecto-diseno-sw.vercel.app/](https://proyecto-diseno-sw.vercel.app/)**
 
 
+## ✨ Funcionalidades Principales
 
-Para ejecutar backend (lo más importante):
+* **Calculadora de Vacaciones:** Calcular vacaciones legales y progresivas según antigüedad.
+* **Control de Horas Extra:** Registrar y visualizar horas extra trabajadas con cálculo de monto.
+* **Feriados:** Consultar feriados chilenos vigentes.
+* **Historial Laboral:** Llevar un registro personal de contratos, sueldos y documentos.
 
+---
+
+## Instalación y Ejecución Local
+
+Sigue estos pasos para ejecutar el proyecto en tu computadora.
+
+### 1. Backend (Servidor)
+**Importante:** Debes ejecutar esto primero para que la base de datos y la API funcionen.
+
+```bash
 cd server
-npm install (paso para uso por primera vez)
+npm install    
 node server.js
-
-Para ejecutar frontend
-cd client
-npm install
-npm run dev
-
-O, simplemente accede a: https://proyecto-diseno-sw.vercel.app/

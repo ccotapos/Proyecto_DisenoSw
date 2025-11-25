@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const ChatSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  title: { type: String, default: "Nueva Conversación" }, // Título automático (ej: primeras palabras)
+  title: { type: String, default: "Nueva Conversación" }, 
   messages: [
     {
       role: { type: String, enum: ['user', 'ai'], required: true },
