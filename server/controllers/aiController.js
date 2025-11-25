@@ -1,18 +1,15 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
-const fs = require('fs');
-const pdf = require('pdf-parse');
+// Asegúrate de que la ruta al modelo sea correcta (mayúscula/minúscula)
+const Chat = require('../models/chat'); 
 
-
-
-
-// ---- FUNCIÓN MAESTRA CON MODELOS VÁLIDOS ---- //
+// ---- FUNCIÓN MAESTRA (Con tus versiones 2.0) ---- //
 async function generateWithFallback(prompt, questionForChat = null) {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error("❌ Falta GEMINI_API_KEY en el archivo .env");
 
   const genAI = new GoogleGenerativeAI(apiKey);
 
-  // Modelos válidos en 2025
+  // TUS MODELOS SOLICITADOS (No los he cambiado)
   const modelsToTry = [
     "gemini-2.0-flash",
     "gemini-2.0-pro",
@@ -31,9 +28,9 @@ async function generateWithFallback(prompt, questionForChat = null) {
         ? `Eres un abogado experto en Código Laboral Chileno. Responde de forma clara y legalmente correcta:\n\n${questionForChat}`
         : prompt;
 
-      // Nueva forma correcta de usar generateContent()
       const result = await model.generateContent(content);
-      const text = result.response.text();
+      const response = await result.response;
+      const text = response.text();
 
       console.log(`✅ Éxito usando ${modelName}`);
       return text;
@@ -47,67 +44,79 @@ async function generateWithFallback(prompt, questionForChat = null) {
   throw new Error(`Todos los modelos fallaron. Último error: ${lastError.message}`);
 }
 
-
-
-// ---- CONTROLADOR CHAT ---- //
-exports.consultAI = async (req, res) => {
-  const { question } = req.body;
-
+// 1. OBTENER LISTA DE CHATS
+exports.getUserChats = async (req, res) => {
   try {
-    const answer = await generateWithFallback(null, question);
-    res.json({ answer });
-
+    const chats = await Chat.find({ userId: req.user.id })
+      .select('title updatedAt') 
+      .sort({ updatedAt: -1 });
+    res.json(chats);
   } catch (error) {
-    console.error("🚨 Error fatal consultAI:", error);
-    res.status(500).json({ msg: "Error al comunicarse con la IA", details: error.message });
+    res.status(500).json({ msg: "Error cargando historial" });
   }
 };
 
-
-
-// ---- CONTROLADOR ANÁLISIS PDF ---- //
-exports.analyzeContract = async (req, res) => {
+// 2. OBTENER UN CHAT ESPECÍFICO
+exports.getChatById = async (req, res) => {
   try {
-    if (!req.file) return res.status(400).json({ msg: "❗ Debes subir un archivo PDF" });
+    const chat = await Chat.findOne({ _id: req.params.id, userId: req.user.id });
+    if (!chat) return res.status(404).json({ msg: "Chat no encontrado" });
+    res.json(chat);
+  } catch (error) {
+    res.status(500).json({ msg: "Error cargando conversación" });
+  }
+};
 
-    console.log("📄 Procesando archivo PDF...");
+// 3. ENVIAR MENSAJE (CORREGIDO)
+exports.sendMessage = async (req, res) => {
+  const { question, chatId } = req.body; 
 
-    const dataBuffer = fs.readFileSync(req.file.path);
-    const pdfData = await pdf(dataBuffer);
-    const contractText = pdfData.text.substring(0, 25000);
+  try {
+    // CORRECCIÓN: Llamamos a la función maestra en lugar de redefinir genAI aquí.
+    // Esto asegura que se usen tus modelos 2.0 y el fallback.
+    const aiAnswer = await generateWithFallback(null, question);
 
-    if (contractText.length < 50) throw new Error("El PDF parece vacío o ilegible.");
+    let chat;
 
-    const prompt = `
-    Analiza objetivamente el siguiente contrato laboral chileno y genera un resumen claro:
+    if (chatId) {
+      // Si ya existe el chat, agregamos los mensajes
+      chat = await Chat.findOne({ _id: chatId, userId: req.user.id });
+      if (chat) {
+        chat.messages.push({ role: 'user', content: question });
+        chat.messages.push({ role: 'ai', content: aiAnswer });
+        chat.updatedAt = Date.now();
+        await chat.save();
+      }
+    } else {
+      // Si es nuevo, creamos el documento
+      // Título automático: primeras 5 palabras
+      const title = question.split(' ').slice(0, 5).join(' ') + "...";
+      
+      chat = new Chat({
+        userId: req.user.id,
+        title: title,
+        messages: [
+          { role: 'user', content: question },
+          { role: 'ai', content: aiAnswer }
+        ]
+      });
+      await chat.save();
+    }
 
-    **Incluye:**
-    1. Tipo de contrato y duración.
-    2. Sueldo y forma de pago.
-    3. Jornada laboral y horas extraordinarias.
-    4. Beneficios explícitos.
-    5. Cláusulas relevantes o riesgos para el trabajador.
-    6. Obligaciones del empleado y empleador.
-
-    ---- TEXTO DEL CONTRATO ----
-    ${contractText}
-    `;
-
-    const analysis = await generateWithFallback(prompt);
-
-    // Limpia el archivo después del análisis
-    fs.unlinkSync(req.file.path);
-
-    res.json({ analysis });
+    res.json({ answer: aiAnswer, chatId: chat._id, title: chat.title });
 
   } catch (error) {
-    console.error("🚨 Error fatal analyzeContract:", error);
+    console.error("Error IA:", error);
+    res.status(500).json({ msg: "Error conectando con la IA", details: error.message });
+  }
+};
 
-    if (req.file && fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
-
-    res.status(500).json({
-      msg: "Error al analizar el documento",
-      details: error.message,
-    });
+// 4. ELIMINAR CHAT
+exports.deleteChat = async (req, res) => {
+  try {
+    await Chat.findOneAndDelete({ _id: req.params.id, userId: req.user.id });
+    res.json({ msg: "Chat eliminado" });
+  } catch (error) {
+    res.status(500).send("Error eliminando");
   }
 };

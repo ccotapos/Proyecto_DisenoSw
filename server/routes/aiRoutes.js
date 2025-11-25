@@ -1,11 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' }); 
+const auth = require('../middleware/auth');
 
-const { consultAI, analyzeContract } = require('../controllers/aiController');
+const { sendMessage, getUserChats, getChatById, deleteChat } = require('../controllers/aiController');
 
-router.post('/consult', consultAI);
-router.post('/analyze', upload.single('contractPdf'), analyzeContract);
+
+router.get('/history', auth, getUserChats);       // Lista de chats
+router.get('/history/:id', auth, getChatById);    // Chat específico
+router.post('/send', auth, sendMessage);          // Enviar pregunta
+router.delete('/history/:id', auth, deleteChat);  // Borrar
 
 module.exports = router;

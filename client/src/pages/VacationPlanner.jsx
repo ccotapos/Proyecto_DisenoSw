@@ -9,20 +9,23 @@ const VacationPlanner = () => {
 
   // --- ESTADOS ---
   const [yearsWorked, setYearsWorked] = useState(0);
-  const [legalDays, setLegalDays] = useState({ 
-    base: 15, 
-    progressive: 0, 
-    totalAnual: 15,
-    maxAccumulation: 30 
-  });
   
+  // Estado maestro: Este es el número que manda (puede ser calculado o manual)
+  const [totalAvailable, setTotalAvailable] = useState(15); 
+  
+  // Datos informativos del cálculo legal (solo para referencia visual)
+  const [legalInfo, setLegalInfo] = useState({ base: 15, progressive: 0 });
+
   const [holidays, setHolidays] = useState([]);
   const [plannedVacations, setPlannedVacations] = useState([]);
   const [dateRange, setDateRange] = useState(new Date());
 
-  // Estado derivado: Días ya utilizados
+  // --- CÁLCULOS DINÁMICOS ---
+  // Días ya gastados en la base de datos
   const daysUsed = plannedVacations.reduce((sum, v) => sum + v.daysTaken, 0);
-  const daysRemaining = legalDays.totalAnual - daysUsed;
+  
+  // Saldo Real = Lo que el usuario dice que tiene - Lo que ha agendado
+  const daysRemaining = totalAvailable - daysUsed;
 
   // --- EFECTOS ---
   useEffect(() => {
@@ -30,24 +33,28 @@ const VacationPlanner = () => {
     fetchPlannedVacations();
   }, []);
 
-  // --- LÓGICA DE NEGOCIO ---
+  // --- LÓGICA ---
 
-  // 1. Calculadora Legal (Igual que antes)
-  const calculateLegal = (years) => {
-    const y = parseInt(years) || 0;
+  // 1. Calculadora Legal (Sugerencia)
+  const calculateLegal = (val) => {
+    const y = parseInt(val) || 0;
     setYearsWorked(y);
     
     const base = 15;
     let progressive = 0;
 
+    // Regla: 10 años base + 3 años nuevos = 1 día extra
     if (y >= 13) {
       progressive = Math.floor((y - 10) / 3);
     }
 
-    const totalAnual = base + progressive;
-    const maxAccumulation = totalAnual * 2;
+    const calculatedTotal = base + progressive;
 
-    setLegalDays({ base, progressive, totalAnual, maxAccumulation });
+    // Actualizamos la info visual
+    setLegalInfo({ base, progressive });
+    
+    // Actualizamos el campo maestro automáticamente (como ayuda)
+    setTotalAvailable(calculatedTotal);
   };
 
   // 2. Obtener Feriados
@@ -57,20 +64,12 @@ const VacationPlanner = () => {
       const data = await res.json();
       setHolidays(data.data.map(h => ({ date: h.date, title: h.title })));
     } catch (err) {
-      // Respaldo manual 2025
       setHolidays([
         { date: "2025-01-01", title: "Año Nuevo" },
         { date: "2025-04-18", title: "Viernes Santo" },
         { date: "2025-05-01", title: "Día del Trabajador" },
         { date: "2025-05-21", title: "Glorias Navales" },
-        { date: "2025-06-20", title: "Día de los Pueblos Indígenas" },
-        { date: "2025-07-16", title: "Virgen del Carmen" },
-        { date: "2025-08-15", title: "Asunción de la Virgen" },
         { date: "2025-09-18", title: "Fiestas Patrias" },
-        { date: "2025-09-19", title: "Glorias del Ejército" },
-        { date: "2025-10-31", title: "Día de las Iglesias Evangélicas" },
-        { date: "2025-11-01", title: "Día de Todos los Santos" },
-        { date: "2025-12-08", title: "Inmaculada Concepción" },
         { date: "2025-12-25", title: "Navidad" }
       ]);
     }
@@ -83,62 +82,54 @@ const VacationPlanner = () => {
     } catch (error) { console.error("Error cargando vacaciones"); }
   };
 
-  // 3. NUEVO: Contar Días Hábiles (Excluye Finde y Feriados)
+  // 3. Contar Días Hábiles
   const countBusinessDays = (start, end) => {
     let count = 0;
     let curDate = new Date(start);
-    // Ajustamos para recorrer hasta el final inclusive
     const endDate = new Date(end);
     
     while (curDate <= endDate) {
       const dayOfWeek = curDate.getDay();
       const dateString = curDate.toISOString().split('T')[0];
-      
-      // Verificar si es feriado
       const isHoliday = holidays.some(h => h.date === dateString);
 
-      // Si NO es Domingo (0) NI Sábado (6) NI Feriado -> Es hábil
       if (dayOfWeek !== 0 && dayOfWeek !== 6 && !isHoliday) {
         count++;
       }
-      
-      // Avanzar al siguiente día
       curDate.setDate(curDate.getDate() + 1);
     }
     return count;
   };
 
-  // 4. Guardar Planificación (Con Validación)
+  // 4. Guardar con Validación Manual
   const handleSaveVacation = async () => {
     if (!Array.isArray(dateRange)) {
-      alert("Por favor selecciona un rango de fechas (clic inicio -> clic fin)");
+      alert("Selecciona un rango de fechas en el calendario.");
       return;
     }
     
     const [start, end] = dateRange;
-    
-    // Calcular DÍAS HÁBILES REALES
     const businessDays = countBusinessDays(start, end);
 
     if (businessDays === 0) {
-      alert("El rango seleccionado no tiene días hábiles (solo fines de semana o feriados).");
+      alert("El rango seleccionado no tiene días hábiles.");
       return;
     }
 
-    // VALIDACIÓN DE SALDO
+    // VALIDACIÓN CONTRA EL SALDO MANUAL
     if (businessDays > daysRemaining) {
-      alert(`⚠️ ¡Cuidado! Estás intentando pedir ${businessDays} días, pero solo te quedan ${daysRemaining} días disponibles según tu antigüedad.`);
-      return; // Detenemos el guardado
+      alert(`⛔ ¡ALERTA DE RESTRICCIÓN! \n\nEstás intentando tomar ${businessDays} días, pero tu saldo disponible es de solo ${daysRemaining} días.\n\nPor favor ajusta tus días acumulados si tienes saldo pendiente de años anteriores.`);
+      return;
     }
 
     try {
       const res = await api.post('/vacations', {
         startDate: start,
         endDate: end,
-        daysTaken: businessDays // Guardamos los hábiles, no los corridos
+        daysTaken: businessDays
       });
       setPlannedVacations([...plannedVacations, res.data]);
-      alert(`✅ Vacaciones agendadas: ${businessDays} días hábiles descontados.`);
+      alert(`✅ Vacaciones agendadas: ${businessDays} días descontados.`);
     } catch (error) {
       alert("Error al guardar");
     }
@@ -152,7 +143,6 @@ const VacationPlanner = () => {
     } catch (error) { alert("Error borrando"); }
   };
 
-  // Personalización Visual Calendario
   const getTileContent = ({ date, view }) => {
     if (view === 'month') {
       const dateStr = date.toISOString().split('T')[0];
@@ -172,53 +162,82 @@ const VacationPlanner = () => {
   return (
     <div className="max-w-6xl mx-auto py-8 px-4 grid md:grid-cols-3 gap-8">
       
-      {/* COLUMNA IZQUIERDA: Calculadora y Saldos */}
+      {/* COLUMNA IZQUIERDA: Configuración de Saldo */}
       <div className="md:col-span-1 space-y-6">
-        <div className="bg-white p-6 rounded-2xl shadow-lg border-t-4 border-brand-secondary">
-          <h2 className="text-xl font-bold text-brand-dark mb-4">📊 Mi Saldo de Vacaciones</h2>
+        
+        {/* TARJETA PRINCIPAL: CONFIGURACIÓN MANUAL */}
+        <div className="bg-white p-6 rounded-2xl shadow-lg border-t-4 border-brand-primary">
+          <h2 className="text-xl font-bold text-brand-dark mb-4">⚙️ Configurar Saldo</h2>
           
-          <div className="mb-4">
-            <label className="text-xs font-bold text-gray-500">Años de Antigüedad</label>
+          {/* Input Calculadora */}
+          <div className="mb-6 border-b pb-4">
+            <label className="text-xs font-bold text-gray-500">Opción A: Calcular por Antigüedad</label>
+            <div className="flex gap-2 items-center mt-1">
+              <input 
+                type="number" 
+                className="w-full border p-2 rounded text-sm" 
+                placeholder="Años trabajados"
+                onChange={(e) => calculateLegal(e.target.value)}
+              />
+              <span className="text-xs text-gray-400 whitespace-nowrap">
+                (Base: {legalInfo.base} + Prog: {legalInfo.progressive})
+              </span>
+            </div>
+          </div>
+
+          {/* Input Manual Maestro */}
+          <div className="mb-2">
+            <label className="text-sm font-bold text-brand-primary flex justify-between">
+              Opción B: Saldo Total Acumulado
+              <span className="text-xs bg-yellow-100 text-yellow-800 px-2 rounded">Editable</span>
+            </label>
+            <p className="text-xs text-gray-400 mb-2">Si tienes días guardados de años anteriores, escribe el total aquí.</p>
             <input 
               type="number" 
-              className="w-full border p-2 rounded mt-1 focus:ring-2 focus:ring-brand-accent outline-none" 
-              placeholder="Ej: 5"
-              onChange={(e) => calculateLegal(e.target.value)}
+              className="w-full border-2 border-brand-secondary p-3 rounded-lg text-xl font-bold text-center text-brand-dark focus:outline-none focus:border-brand-accent"
+              value={totalAvailable}
+              onChange={(e) => setTotalAvailable(parseInt(e.target.value) || 0)}
             />
           </div>
+        </div>
 
-          {/* TARJETA DE SALDO DISPONIBLE */}
-          <div className={`p-4 rounded-xl border-2 text-center ${daysRemaining < 0 ? 'bg-red-50 border-red-200 text-red-800' : 'bg-green-50 border-green-200 text-green-800'}`}>
-            <p className="text-xs font-bold uppercase tracking-wider mb-1">Días Disponibles</p>
-            <p className="text-4xl font-extrabold">{Math.max(0, daysRemaining)}</p>
-            <p className="text-xs mt-2 opacity-80">de {legalDays.totalAnual} totales anuales</p>
-          </div>
-
-          <div className="text-xs text-gray-500 space-y-1 mt-4 bg-gray-50 p-3 rounded">
-            <div className="flex justify-between"><span>Días Base:</span> <strong>{legalDays.base}</strong></div>
-            <div className="flex justify-between"><span>Días Progresivos:</span> <strong>+{legalDays.progressive}</strong></div>
-            <div className="flex justify-between text-red-500"><span>Usados/Planificados:</span> <strong>-{daysUsed}</strong></div>
-          </div>
+        {/* TARJETA DE SALDO RESTANTE */}
+        <div className={`p-6 rounded-2xl border-2 text-center shadow-md transition-colors ${daysRemaining < 0 ? 'bg-red-50 border-red-300' : 'bg-green-50 border-green-300'}`}>
+          <p className="text-xs font-bold uppercase tracking-wider text-gray-600 mb-2">Saldo Disponible Real</p>
+          <p className={`text-5xl font-extrabold ${daysRemaining < 0 ? 'text-red-600' : 'text-green-700'}`}>
+            {daysRemaining}
+          </p>
+          <p className="text-sm mt-2 font-medium text-gray-500">
+            Días hábiles restantes
+          </p>
+          {daysRemaining < 0 && (
+            <p className="text-xs text-red-500 mt-2 font-bold">⚠️ Has excedido tu límite</p>
+          )}
         </div>
 
         {/* Lista de Vacaciones */}
         <div className="bg-white p-6 rounded-2xl shadow-md">
-          <h3 className="font-bold text-brand-dark mb-4">Mis Descansos</h3>
+          <h3 className="font-bold text-brand-dark mb-4 flex justify-between">
+            Mis Descansos <span className="text-red-500 text-sm">(-{daysUsed})</span>
+          </h3>
           {plannedVacations.length === 0 ? (
             <p className="text-sm text-gray-400">No hay vacaciones agendadas.</p>
           ) : (
-            <ul className="space-y-3">
+            <ul className="space-y-3 max-h-60 overflow-y-auto">
               {plannedVacations.map(v => (
-                <li key={v._id} className="text-sm border-l-4 border-green-400 pl-3 py-2 bg-gray-50 flex justify-between items-center">
+                <li key={v._id} className="text-sm border-l-4 border-green-400 pl-3 py-2 bg-gray-50 flex justify-between items-center rounded-r">
                   <div>
                     <p className="font-bold text-gray-700">
-                      {new Date(v.startDate).toLocaleDateString()} - {new Date(v.endDate).toLocaleDateString()}
+                      {new Date(v.startDate).toLocaleDateString('es-CL')}
                     </p>
-                    <span className="text-xs bg-green-200 text-green-800 px-2 py-0.5 rounded-full font-bold">
-                      {v.daysTaken} hábiles
+                    <span className="text-xs text-gray-500">
+                      hasta {new Date(v.endDate).toLocaleDateString('es-CL')}
                     </span>
                   </div>
-                  <button onClick={() => handleDelete(v._id)} className="text-red-400 hover:text-red-600 px-2">🗑️</button>
+                  <div className="flex items-center gap-3">
+                    <span className="font-bold text-brand-primary">-{v.daysTaken}</span>
+                    <button onClick={() => handleDelete(v._id)} className="text-red-300 hover:text-red-600">✕</button>
+                  </div>
                 </li>
               ))}
             </ul>
@@ -228,18 +247,19 @@ const VacationPlanner = () => {
 
       {/* COLUMNA DERECHA: Calendario */}
       <div className="md:col-span-2">
-        <div className="bg-white p-6 rounded-2xl shadow-lg">
+        <div className="bg-white p-6 rounded-2xl shadow-lg h-full flex flex-col">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-brand-primary">📅 Planificador Inteligente</h2>
+            <h2 className="text-2xl font-bold text-brand-primary">📅 Seleccionar Fechas</h2>
             <button 
               onClick={handleSaveVacation}
-              className="bg-brand-accent text-brand-dark px-4 py-2 rounded-lg font-bold shadow hover:opacity-80 transition"
+              className="bg-brand-accent text-brand-dark px-6 py-2 rounded-lg font-bold shadow hover:opacity-80 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={daysRemaining <= 0}
             >
-              Guardar Selección
+              {daysRemaining <= 0 ? "Saldo Insuficiente" : "Agendar Vacaciones"}
             </button>
           </div>
 
-          <div className="calendar-container flex justify-center">
+          <div className="calendar-container flex-1 flex justify-center">
             <Calendar
               onChange={setDateRange}
               value={dateRange}
@@ -249,13 +269,8 @@ const VacationPlanner = () => {
             />
           </div>
 
-          <div className="mt-6 bg-blue-50 p-4 rounded-lg border border-blue-100">
-            <h4 className="text-sm font-bold text-blue-900 mb-2">ℹ️ Cómo funciona el cálculo:</h4>
-            <ul className="text-xs text-blue-800 space-y-1 list-disc pl-4">
-              <li>Selecciona un rango de fechas en el calendario (inicio y fin).</li>
-              <li>El sistema <strong>excluye automáticamente</strong> sábados, domingos y feriados.</li>
-              <li>Si intentas pedir más días de los que tienes disponibles, te avisará.</li>
-            </ul>
+          <div className="mt-6 bg-yellow-50 p-4 rounded-lg border border-yellow-200 text-xs text-yellow-800">
+            <strong>💡 Nota Importante:</strong> El sistema valida automáticamente que el rango seleccionado no supere tu <strong>Saldo Disponible Real</strong>. Los fines de semana y feriados no se descuentan de tu saldo.
           </div>
         </div>
       </div>
