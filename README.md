@@ -1,6 +1,6 @@
-# Proyecto Diseño de Software (GestoLaboral)
+# Proyecto Diseño de Software (Gestor Laboral)
 
-Repositorio del Proyecto de Diseño de Software. Esta es una aplicación web diseñada para trabajadores o PyMEs que permite gestionar información laboral básica de manera eficiente.
+Esta es una aplicación web diseñada para trabajadores o Pymes que permite gestionar información laboral básica de manera eficiente.
 
 ## Acceso directo Front End
 Puedes acceder a la aplicación desplegada aquí:
@@ -18,7 +18,7 @@ Puedes acceder a la aplicación desplegada aquí:
 
 ## Instalación y Ejecución Local
 
-Sigue estos pasos para ejecutar el proyecto en tu computadora.
+Sigue estos pasos para ejecutar el backend en tu computadora.
 
 ### 1. Backend (Servidor)
 **Importante:** Debes ejecutar esto primero para que la base de datos y la API funcionen.
