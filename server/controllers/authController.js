@@ -1,7 +1,7 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const Contract = require('../models/Contract'); 
+const Contract = require('../models/contract'); 
 const WorkEntry = require('../models/WorkEntry');
 const Vacation = require('../models/vacation');
 
